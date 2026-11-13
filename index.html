@@ -154,8 +154,6 @@ button.ent{border:0;background:var(--surface);border-radius:12px;padding:10px 12
 .day.sad .tl::before{border-color:var(--grey)}
 .day.sad .dot{border-color:var(--grey);background:var(--grey)}
 .sadline{font-family:var(--f-display);font-weight:500;font-size:1.2rem;line-height:1.2}
-.letters{background:var(--bg);border-radius:14px;padding:14px;display:grid;gap:8px}
-.letters blockquote{margin:0;padding-left:12px;border-left:3px solid var(--grey)}
 @keyframes rain{to{background-position:-38px 140px}}
 @media (prefers-reduced-motion: reduce){.day.sad::after{animation:none}}
 
@@ -340,7 +338,7 @@ const LEGS=[
 
 /* ---------- estado ---------- */
 const LS={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
-const S={who:null,people:{a:'',b:''},decisions:{},ideas:[],options:[],checklist:[],stays:[],days:{},recados:[],db:null,dbState:'loading',readOnly:false,tab:'dias',filter:'todas',scores:{},sound:true,audio:'jogo',tracks:[],playlist:'',recsHidden:{},recX:[],recPage:0,playlistId:'',now:null};
+const S={who:null,people:{a:'',b:''},decisions:{},ideas:[],options:[],checklist:[],stays:[],days:{},db:null,dbState:'loading',readOnly:false,tab:'dias',filter:'todas',scores:{},sound:true,audio:'jogo',tracks:[],playlist:'',recsHidden:{},recX:[],recPage:0,playlistId:'',now:null};
 S.who=LS.get('who');if(S.who!=='a'&&S.who!=='b')S.who=null;S.audio=LS.get('audio')||(LS.get('sound')==='0'?'off':'jogo');if(!['jogo','playlist','off'].includes(S.audio))S.audio='jogo';S.sound=S.audio==='jogo';
 const TABS=[['dias','Dias','cal'],['reservas','Reservas','bed'],['ideias','Ideias','bulb'],['decidir','Decidir','fork'],['estrada','Estrada','road'],['jogo','Jogo','game'],['playlist','Playlist','eq']];
 const pname=k=>S.people[k]||(k==='a'?'Pessoa 1':'Pessoa 2');
@@ -393,7 +391,7 @@ function whoSheet(){
   const mk=k=>h('button',{class:'pick',type:'button','aria-pressed':String(pick===k),onclick:()=>{pick=k;ba.setAttribute('aria-pressed',String(k==='a'));bb.setAttribute('aria-pressed',String(k==='b'))}},icon('user'),h('span',{},lab(k)));
   const ba=mk('a'),bb=mk('b');
   na.addEventListener('input',()=>{ba.lastChild.textContent=lab('a')});nb.addEventListener('input',()=>{bb.lastChild.textContent=lab('b')});
-  openSheet('Quem está aí?',[h('p',{},'Escrevam os dois nomes e marquem quem usa este aparelho. Serve para as curtidas, os recados e o placar do jogo.'),
+  openSheet('Quem está aí?',[h('p',{},'Escrevam os dois nomes e marquem quem usa este aparelho. Serve para as curtidas e o placar do jogo.'),
     h('div',{class:'two'},fld('f-na','Um nome',na),fld('f-nb','Outro nome',nb)),ba,bb,
     h('button',{class:'btn',type:'button',onclick:async()=>{if(!pick){toast('Marque quem é você.');return}
       S.who=pick;LS.set('who',pick);const a=na.value.trim(),b=nb.value.trim();
@@ -511,8 +509,7 @@ function daySection(d,i,today){
   if(dec)kids.push(decCallout(dec));
   if(d==='2027-01-09'&&!stay&&S.db)kids.push(h('div',{class:'callout'},h('span',{class:'mono'},'Atenção'),h('b',{},'Última noite: o voo sai às 05:25 de Curitiba'),
     h('p',{},'De Florianópolis ao aeroporto são 288 km (~3h55 sem trânsito); de Cabeçudas, 205 km (~3 h). O plano desses dias precisa terminar em Curitiba.')));
-  if(last)kids.push(lettersBox());
-  else kids.push(h('button',{class:'add',type:'button',onclick:()=>addToDaySheet(d)},icon('plus'),'adicionar neste dia'));
+  if(!last)kids.push(h('button',{class:'add',type:'button',onclick:()=>addToDaySheet(d)},icon('plus'),'adicionar neste dia'));
   if(d<=today){
     kids.push(note&&note.text
       ?h('div',{class:'moment'},h('span',{class:'mono'},'Momento do dia'),h('q',{},note.text),h('div',{class:'row'},h('button',{class:'btn ghost small',type:'button',onclick:()=>momentSheet(d,note.text)},'Editar')))
@@ -521,15 +518,6 @@ function daySection(d,i,today){
   return h('section',{class:'day'+(d===today?' today':'')+(last?' sad':''),id:'d-'+d},kids);
 }
 const momentSheet=(d,cur)=>textSheet('Momento de '+fmtDay(d),'Uma frase sobre o melhor do dia. Os dois veem.',cur,200,v=>write(db=>db.doc('days/'+d).set({text:v}),'Guardado'));
-function lettersBox(){
-  const open=Date.now()>=LEAVE,n=S.recados.length;
-  const add=h('button',{class:'btn small',type:'button',onclick:()=>{if(!S.who){whoSheet();return}
-    textSheet('Recado para o dia 10','Depois de guardar, o recado some da tela e só reaparece no dia 10, depois das 05:25.','',600,v=>write(db=>db.collection('recados').add({text:v,who:S.who,at:Date.now()}),'Recado guardado até o dia 10'))}},'Escrever um recado');
-  if(!open)return h('div',{class:'letters'},h('span',{class:'mono'},'Recados lacrados'),h('b',{},n?(n===1?'1 recado guardado':n+' recados guardados'):'Nenhum recado ainda'),
-    h('p',{class:'note'},'Escrevam durante a viagem. A página só mostra os textos no dia 10, depois da decolagem.'),h('div',{class:'row'},add));
-  return h('div',{class:'letters'},h('span',{class:'mono'},'Recados abertos'),
-    n?S.recados.slice().sort((a,b)=>(a.at||0)-(b.at||0)).map(r=>h('blockquote',{},h('p',{},r.text),h('span',{class:'mono'},pname(r.who==='b'?'b':'a')))):h('p',{class:'note'},'Ninguém deixou recado.'),h('div',{class:'row'},add));
-}
 
 /* ---------- telas ---------- */
 function hero(){
@@ -1023,7 +1011,6 @@ async function connect(code){
   db.collection('options').onSnapshot(s=>{S.options=rows(s);soon()});
   db.collection('checklist').onSnapshot(s=>{S.checklist=rows(s);soon()});
   db.collection('stays').onSnapshot(s=>{S.stays=rows(s);soon()});
-  db.collection('recados').onSnapshot(s=>{S.recados=rows(s);soon()});
   db.collection('tracks').onSnapshot(s=>{S.tracks=rows(s);soon()});
   db.collection('days').onSnapshot(s=>{const m={};s.docs.forEach(d=>{m[d.id]=d.data()});S.days=m;soon()});
   db.doc('meta/people').onSnapshot(s=>{const d=s.exists?s.data():{};S.people={a:String(d.a||''),b:String(d.b||'')};soon()});
