@@ -4,5 +4,5 @@
 window.TRIP_CONFIG = {
   supabaseUrl: 'https://cwndenjpiibwobtkwzig.supabase.co',
   supabaseKey: 'sb_publishable_IvFAnItybjFtHS9uZwEmHA_X5u-LZt3',
-  spotifyClientId: ''
+  spotifyClientId: 'babd9979abd34b53976825ca8732174a'
 };
