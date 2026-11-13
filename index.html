@@ -210,7 +210,8 @@ span.like{background:transparent}
 
 /* jogo */
 .game{position:relative;width:100%;max-width:360px;margin:0 auto;border-radius:22px;overflow:hidden;background:var(--surface)}
-.g-cv{display:block;width:100%;height:auto;aspect-ratio:320/420;touch-action:none}
+.g-cv{display:block;width:100%;height:auto;aspect-ratio:320/420;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.game,.game button,.tabs a,.chip,.btn,.like{touch-action:manipulation}
 .g-ov{position:absolute;inset:0;display:grid;align-content:center;justify-items:center;gap:10px;padding:24px;text-align:center;background:var(--veil)}
 .g-ov b{font-family:var(--f-display);font-weight:500;font-size:1.1rem;line-height:1.25}
 .g-ov p{font-size:.92rem;color:var(--ink-2);max-width:26ch}
@@ -226,8 +227,8 @@ span.like{background:transparent}
 /* abas */
 .tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--bg);border-top:1px solid var(--line);
   padding-bottom:env(safe-area-inset-bottom,0px);padding-left:max(4px,env(safe-area-inset-left,0px));padding-right:max(4px,env(safe-area-inset-right,0px))}
-.tabs div{max-width:640px;margin:0 auto;display:grid;grid-template-columns:repeat(6,minmax(0,1fr))}
-.tabs a{display:grid;justify-items:center;gap:2px;padding:9px 0 8px;font-size:.66rem;font-weight:600;color:var(--ink-2);text-decoration:none}
+.tabs div{max-width:640px;margin:0 auto;display:grid;grid-template-columns:repeat(7,minmax(0,1fr))}
+.tabs a{display:grid;justify-items:center;gap:2px;padding:9px 0 8px;font-size:.6rem;font-weight:600;color:var(--ink-2);text-decoration:none}
 .tabs a .ic{width:1.35rem;height:1.35rem}
 .tabs a[aria-current]{color:var(--sea)}
 
@@ -339,9 +340,9 @@ const LEGS=[
 
 /* ---------- estado ---------- */
 const LS={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
-const S={who:null,people:{a:'',b:''},decisions:{},ideas:[],options:[],checklist:[],stays:[],days:{},recados:[],db:null,dbState:'loading',readOnly:false,tab:'dias',filter:'todas',scores:{},sound:true,sub:'jogo',tracks:[],playlist:'',playlistId:'',now:null};
-S.who=LS.get('who');if(S.who!=='a'&&S.who!=='b')S.who=null;S.sound=LS.get('sound')!=='0';
-const TABS=[['dias','Dias','cal'],['reservas','Reservas','bed'],['ideias','Ideias','bulb'],['decidir','Decidir','fork'],['estrada','Estrada','road'],['pista','Pista','eq']];
+const S={who:null,people:{a:'',b:''},decisions:{},ideas:[],options:[],checklist:[],stays:[],days:{},recados:[],db:null,dbState:'loading',readOnly:false,tab:'dias',filter:'todas',scores:{},sound:true,audio:'jogo',tracks:[],playlist:'',recsHidden:{},recX:[],recPage:0,playlistId:'',now:null};
+S.who=LS.get('who');if(S.who!=='a'&&S.who!=='b')S.who=null;S.audio=LS.get('audio')||(LS.get('sound')==='0'?'off':'jogo');if(!['jogo','playlist','off'].includes(S.audio))S.audio='jogo';S.sound=S.audio==='jogo';
+const TABS=[['dias','Dias','cal'],['reservas','Reservas','bed'],['ideias','Ideias','bulb'],['decidir','Decidir','fork'],['estrada','Estrada','road'],['jogo','Jogo','game'],['playlist','Playlist','eq']];
 const pname=k=>S.people[k]||(k==='a'?'Pessoa 1':'Pessoa 2');
 const safeUrl=u=>/^https?:\/\//i.test(u||'')?u:null;
 const maps=q=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q);
@@ -624,7 +625,7 @@ function viewEstrada(){
         h('span',{class:'b',style:'left:42.3%'},'Joinville · 118 km'),h('span',{class:'b last'},'280 km de autonomia')),
       h('p',{},'A viagem gasta uns três quartos da autonomia de etiqueta do BYD (cerca de 280 km no ciclo do Inmetro, bateria de uns 38 kWh). Em rodovia a autonomia real costuma ser menor. A descida da serra ajuda na ida e cobra na volta.'),
       h('p',{class:'note'},'Cerca de 3h15 sem trânsito. No fim de ano a BR-101 costuma travar perto do litoral, então a conta real é maior.'),
-      h('div',{class:'row'},ext(mapsDir('Alto da XV, Curitiba','Hotel Marambaia Cabeçudas, Itajaí'),'Abrir rota no Maps'),ext('https://www.plugshare.com/','PlugShare'),h('a',{class:'btn small',href:'#pista',onclick:()=>{S.sub='jogo'}},icon('game'),'Jogar esse trecho'))),
+      h('div',{class:'row'},ext(mapsDir('Alto da XV, Curitiba','Hotel Marambaia Cabeçudas, Itajaí'),'Abrir rota no Maps'),ext('https://www.plugshare.com/','PlugShare'),h('a',{class:'btn small',href:'#jogo'},icon('game'),'Jogar esse trecho'))),
     h('div',{class:'card'},h('span',{class:'mono'},'onde dá para recarregar'),h('h3',{},'Pontos de recarga rápida'),
       h('ul',{class:'stops'},h('li',{},h('b',{},'Joinville, Pirabeiraba: '),'Posto Buffon 15, BR-101 km 33. Hub GreenV com duas vagas de até 150 kW. Fica no meio do caminho, bom para almoçar tarde ou esticar as pernas.'),
         h('li',{},h('b',{},'Balneário Camboriú: '),'American Oil, BR-101 km 138 (rede Volvo).'),h('li',{},h('b',{},'Itajaí: '),'Posto Universitário Rede Galo, Rua José Testoni (rede Volvo).')),
@@ -657,8 +658,8 @@ function beatSound(b){
 const blip=(a,b)=>{if(S.sound&&AC)tone('triangle',a,b,AC.currentTime+.01,.1,.1)};
 const newRun=()=>({t:0,km:0,bat:100,lane:1,x:LX[1],items:[],beat:-1,free:1,msg:'',msgT:0,jv:false,discs:0,last:null});
 function overlay(o){if(!o){G.ov.hidden=true;return}G.ov.hidden=false;G.ov.replaceChildren(...[h('b',{},o.title),h('p',{},o.msg),h('button',{class:'btn',type:'button',onclick:o.fn||startGame},o.btn||'Jogar de novo'),o.extra].filter(Boolean))}
-function startGame(){audio();G.r=newRun();G.state='run';G.last=performance.now();overlay(null);requestAnimationFrame(frame)}
-function resumeGame(){audio();G.state='run';G.last=performance.now();overlay(null);requestAnimationFrame(frame)}
+function startGame(){audio();if(S.audio==='playlist'&&typeof playerPlay==='function')playerPlay();G.r=newRun();G.state='run';G.last=performance.now();overlay(null);requestAnimationFrame(frame)}
+function resumeGame(){audio();if(S.audio==='playlist'&&typeof playerPlay==='function')playerPlay();G.state='run';G.last=performance.now();overlay(null);requestAnimationFrame(frame)}
 function pauseGame(){G.state='paused';overlay({title:'Pausado',msg:'O BYD está no acostamento, no km '+Math.floor(G.r.km)+'.',btn:'Continuar',fn:resumeGame})}
 function move(d){const r=G.r;if(G.state!=='run'||!r)return;r.lane=Math.max(0,Math.min(2,r.lane+d))}
 function onBeat(r,b){
@@ -724,7 +725,7 @@ function draw(){
 }
 function frame(ts){
   if(G.state!=='run')return;
-  if(S.tab!=='pista'||S.sub!=='jogo'||document.hidden){pauseGame();return}
+  if(S.tab!=='jogo'||document.hidden){pauseGame();return}
   const dt=Math.min(.05,Math.max(0,(ts-G.last)/1000));G.last=ts;step(dt);
   if(G.state==='run'){draw();requestAnimationFrame(frame)}
 }
@@ -732,27 +733,39 @@ function gameEl(){
   if(G.el)return G.el;
   const cv=h('canvas',{class:'g-cv',role:'img','aria-label':'Jogo: o BYD azul na estrada, visto de cima'}),dpr=Math.min(2,window.devicePixelRatio||1);
   cv.width=GW*dpr;cv.height=GH*dpr;G.ctx=cv.getContext('2d');G.ctx.scale(dpr,dpr);
-  cv.addEventListener('pointerdown',e=>{if(G.state!=='run')return;e.preventDefault();const b=cv.getBoundingClientRect();move(e.clientX-b.left<b.width/2?-1:1)});
+  // o carro segue o dedo: a faixa é a que está embaixo do toque, e arrastar troca de faixa
+  const steer=x=>{const r=G.r;if(G.state!=='run'||!r)return;const b=cv.getBoundingClientRect(),gx=(x-b.left)/b.width*GW;r.lane=gx<115?0:gx<205?1:2};
+  let down=false;
+  cv.addEventListener('pointerdown',e=>{down=true;try{cv.setPointerCapture(e.pointerId)}catch(_){}steer(e.clientX)});
+  cv.addEventListener('pointermove',e=>{if(down||e.pointerType==='mouse'&&e.buttons)steer(e.clientX)});
+  ['pointerup','pointercancel'].forEach(t=>cv.addEventListener(t,()=>{down=false}));
+  // sem zoom nem rolagem enquanto o dedo está na pista
+  ['touchstart','touchmove','touchend'].forEach(t=>cv.addEventListener(t,e=>{if(e.cancelable)e.preventDefault()},{passive:false}));
+  ['dblclick','gesturestart','contextmenu'].forEach(t=>cv.addEventListener(t,e=>e.preventDefault()));
   G.ov=h('div',{class:'g-ov'});G.el=h('div',{class:'game'},cv,G.ov);draw();
-  overlay({title:'Rumo a Cabeçudas',msg:'Toque na esquerda ou na direita para trocar de faixa. Desvie dos caminhões, pegue os raios e os discos.',btn:'Jogar'});
+  overlay({title:'Rumo a Cabeçudas',msg:'Arraste o dedo para os lados: o BYD segue o seu dedo. Desvie dos caminhões, pegue os raios e os discos.',btn:'Jogar'});
   return G.el;
 }
-document.addEventListener('keydown',e=>{if(S.tab!=='pista'||S.sub!=='jogo'||G.state!=='run')return;if(e.key==='ArrowLeft'||e.key==='a'){move(-1);e.preventDefault()}else if(e.key==='ArrowRight'||e.key==='d'){move(1);e.preventDefault()}});
+document.addEventListener('keydown',e=>{if(S.tab!=='jogo'||G.state!=='run')return;if(e.key==='ArrowLeft'||e.key==='a'){move(-1);e.preventDefault()}else if(e.key==='ArrowRight'||e.key==='d'){move(1);e.preventDefault()}});
 const spSearch=q=>'https://open.spotify.com/search/'+encodeURIComponent(q);
 const trackUrl=t=>safeUrl(t.link)||spSearch([t.title,t.artist].filter(Boolean).join(' '));
-function viewPista(){
-  return[h('div',{class:'vh'},h('h2',{},'Pista'),h('p',{},S.sub==='jogo'?'Os 214 km de Curitiba até o hotel em menos de um minuto, a 124 bpm. Pontos: km rodados, 5 por disco e a bateria que sobrar na chegada.':'A trilha da viagem, montada pelos dois.')),
-    h('div',{class:'chips',role:'group','aria-label':'Pista'},[['jogo','Jogo'],['playlist','Playlist']].map(t=>h('button',{class:'chip',type:'button','aria-pressed':String(S.sub===t[0]),onclick:()=>{S.sub=t[0];render()}},t[1]))),
-    ...(S.sub==='jogo'?jogoView():playlistView())];
+function setAudio(m){
+  if(m==='playlist'&&!S.playlistId){toast('Cole o link da playlist de vocês na aba Playlist primeiro.');return}
+  S.audio=m;S.sound=m==='jogo';LS.set('audio',m);
+  if(typeof playerPlay==='function'){if(m==='playlist')playerPlay();else playerPause()}
+  render();
 }
-function jogoView(){
+function viewJogo(){
   const best=k=>S.scores[k]?S.scores[k]+' pts':'sem recorde';
-  return[gameEl(),
-    h('div',{class:'row',style:'justify-content:center'},h('button',{class:'btn ghost small',type:'button','aria-pressed':String(S.sound),onclick:()=>{S.sound=!S.sound;LS.set('sound',S.sound?'1':'0');render()}},S.sound?'Batida do jogo ligada':'Batida do jogo desligada')),
+  return[h('div',{class:'vh'},h('h2',{},'Rumo a Cabeçudas'),h('p',{},'Os 214 km de Curitiba até o hotel em menos de um minuto, a 124 bpm. Pontos: km rodados, 5 por disco e a bateria que sobrar na chegada.')),
+    gameEl(),
+    h('div',{class:'chips',role:'group','aria-label':'Som do jogo',style:'justify-content:center'},[['jogo','Som do jogo'],['playlist','Nossa playlist'],['off','Sem som']].map(o=>h('button',{class:'chip',type:'button','aria-pressed':String(S.audio===o[0]),onclick:()=>setAudio(o[0])},o[1]))),
+    S.audio==='playlist'&&h('p',{class:'note',style:'text-align:center'},'A playlist toca no player do Spotify no topo desta tela. Se não começar sozinha, toque no play dele.'),
     S.now&&h('p',{class:'note',style:'text-align:center'},'Tocando no seu Spotify: '+S.now.title+' · '+S.now.artist),
     h('div',{class:'card'},h('span',{class:'mono'},'Recordes'),h('ul',{class:'legs'},['a','b'].map(k=>h('li',{},h('span',{},pname(k)+(S.who===k?' (você)':'')),h('b',{},best(k))))),
       !S.who&&h('p',{class:'note'},'Toque em “Quem é você?” lá em cima para o seu recorde entrar no placar.'))];
 }
+function viewPlaylist(){return[h('div',{class:'vh'},h('h2',{},'Playlist'),h('p',{},'A trilha da viagem, montada pelos dois.')),...playlistView()]}
 
 /* ---------- banco: Supabase por funções (o código da viagem é a chave) ---------- */
 const CFG=window.TRIP_CONFIG||{};
@@ -828,8 +841,25 @@ async function spApi(path,opt){
   if(r.status===204||r.status===202)return null;if(!r.ok)throw{code:r.status};return r.json().catch(()=>null);
 }
 function spLogout(){SP.t=SP.rt=null;SP.exp=0;spSave();S.now=null;render()}
+const fromSp=it=>{const img=((it.album&&it.album.images)||[]).slice(-1)[0];return{title:String(it.name||''),artist:(it.artists||[]).map(a=>a.name).join(', '),uri:it.uri,link:(it.external_urls&&it.external_urls.spotify)||'',cover:img?img.url:''}};
+async function spFind(title,artist){
+  const first=String(artist||'').split(',')[0].trim();
+  const r=await spApi('/search?type=track&limit=1&q='+encodeURIComponent('track:"'+title+'"'+(first?' artist:"'+first+'"':'')));
+  const it=r&&r.tracks&&r.tracks.items&&r.tracks.items[0];return it?fromSp(it):null;
+}
+let syncing=false;
 async function spSync(silent){
-  const pid=S.playlistId;if(!pid||!spOn()||SP.noWrite||!S.db)return;
+  if(syncing||!spOn()||!S.db)return;syncing=true;
+  try{await spSyncRun(silent)}finally{syncing=false}
+}
+async function spSyncRun(silent){
+  // faixas adicionadas só pelo nome: acha no Spotify para ganhar capa e poder subir para a playlist
+  for(const t of S.tracks.filter(t=>!t.uri&&!t.nouri&&t.title).slice(0,10)){
+    try{const f=await spFind(t.title,t.artist);
+      if(f&&S.tracks.some(x=>x.uri===f.uri))await S.db.doc('tracks/'+t.id).update({nouri:true});
+      else await S.db.doc('tracks/'+t.id).update(f?{uri:f.uri,link:t.link||f.link,cover:f.cover}:{nouri:true})}catch(e){break}
+  }
+  const pid=S.playlistId;if(!pid||SP.noWrite)return;
   const todo=S.tracks.filter(t=>t.uri&&!t.sp).sort(byOrder);if(!todo.length)return;
   try{await spApi('/playlists/'+pid+'/items',{method:'POST',body:{uris:todo.map(t=>t.uri)}});
     for(const t of todo)await S.db.doc('tracks/'+t.id).update({sp:true});
@@ -845,10 +875,67 @@ async function spCreate(){
   catch(e){toast(e&&e.code==='no_auth'?'Conecte o Spotify primeiro.':'Não deu para criar a playlist.')}
 }
 setInterval(async()=>{
-  if(S.tab!=='pista'||document.hidden||!spOn())return;
+  if(S.tab!=='jogo'||document.hidden||!spOn())return;
   try{const r=await spApi('/me/player/currently-playing'),it=r&&r.is_playing&&r.item,now=it?{title:String(it.name||''),artist:(it.artists||[]).map(a=>a.name).join(', ')}:null;
     if(JSON.stringify(now)!==JSON.stringify(S.now)){S.now=now;if(G.state!=='run')render()}}catch(e){}
 },12000);
+
+/* ---------- player do Spotify (fica vivo fora das telas, para não parar a música) ---------- */
+const PL={pid:'',ctl:null,pending:null};
+function playerMount(pid){
+  if(PL.pid===pid)return;PL.pid=pid;PL.ctl=null;
+  const box=$('#player');box.replaceChildren();if(!pid)return;
+  const holder=h('div',{});box.append(holder);
+  const plain=()=>{if(PL.pid===pid&&!PL.ctl&&!box.querySelector('iframe'))box.replaceChildren(h('iframe',{src:'https://open.spotify.com/embed/playlist/'+pid+'?utm_source=generator',title:'Player do Spotify',height:'152',allow:'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture'}))};
+  const make=api=>{if(PL.pid!==pid)return;try{api.createController(holder,{uri:'spotify:playlist:'+pid,width:'100%',height:152},ctl=>{if(PL.pid===pid)PL.ctl=ctl})}catch(e){plain()}};
+  if(window.SpIframeApi)make(window.SpIframeApi);
+  else{PL.pending=make;
+    if(!document.getElementById('sp-iframe-api')){window.onSpotifyIframeApiReady=api=>{window.SpIframeApi=api;if(PL.pending)PL.pending(api)};
+      const sc=document.createElement('script');sc.id='sp-iframe-api';sc.async=true;sc.src='https://open.spotify.com/embed/iframe-api/v1';sc.onerror=plain;document.head.append(sc)}}
+  setTimeout(plain,6000);
+}
+function playerPlay(){try{if(PL.ctl)(PL.ctl.resume||PL.ctl.play).call(PL.ctl)}catch(e){}}
+function playerPause(){try{if(PL.ctl)PL.ctl.pause()}catch(e){}}
+
+/* ---------- recomendadas: curtir joga a faixa na playlist ---------- */
+const RECS=[['Running','Anyma, Meg Myers'],['Eternity','Anyma, Chris Avantgarde'],['Home','Adriatique, Marino Canal, Delhia De France'],['Miracle','Adriatique, WhoMadeWho'],
+ ['Beyond Beliefs','Ben Böhmer'],['Breathing','Ben Böhmer, Nils Hoffmann, Malou'],['Boavista','Stephan Bodzin'],['Innerbloom','RÜFÜS DU SOL'],['On My Knees','RÜFÜS DU SOL'],['Next to Me','RÜFÜS DU SOL'],
+ ['Grey','Kölsch'],['The Feeling','Massano'],['Aria','Argy, Omnya'],['Oxygen Levels Low','Colyn'],['Concorde','Miss Monique'],['Weak','Vintage Culture, Maxi Jazz'],
+ ['Drive','Black Coffee, David Guetta, Delilah Montagu'],['Move','Adam Port, Stryv, Malachiii'],['The Rapture Pt.III','&ME, Black Coffee, Keinemusik'],['Desire','Bob Moses, ZHU'],
+ ['Brightest Lights','Lane 8, POLIÇA'],['The One You Left Behind','Yotto, Vök'],['Rabbit Hole','CamelPhat, Jem Cooke'],['For a Feeling','CamelPhat, ARTBAT, RHODES'],
+ ['The Space In Between','Jan Blomqvist'],['Burning Sun','Monolink'],['Flame','ARTBAT'],['Flashdance','Deep Dish'],['Night After Night','Fideles'],['Never Give Up','Mathame'],["You're So High",'Eli & Fur'],['Dance With Me','Kevin de Vries']
+].map(r=>({title:r[0],artist:r[1],key:(r[0]+'-'+r[1].split(',')[0]).toLowerCase().normalize('NFD').replace(/[^a-z0-9]+/g,'-')}));
+const recList=()=>S.recX.concat(RECS).filter(r=>!S.recsHidden[r.key]&&!S.tracks.some(t=>t.rec===r.key||(r.uri&&t.uri===r.uri)));
+const hideRec=r=>write(db=>upsert(db,'meta/recs',{hidden:{[r.key]:true}}));
+async function likeRec(r,btn){
+  if(btn)btn.disabled=true;
+  let f=r.uri?r:null;if(!f&&spOn()){try{f=await spFind(r.title,r.artist)}catch(e){}}
+  if(f&&S.tracks.some(t=>t.uri===f.uri)){toast('Essa faixa já está na playlist.');hideRec(r);return}
+  const doc={title:f?f.title:r.title,artist:f?f.artist:r.artist,uri:f?f.uri:'',link:f?f.link:'',cover:f?f.cover:'',rec:r.key,likes:S.who?{[S.who]:true}:{},order:Date.now()};
+  if(await write(db=>db.collection('tracks').add(doc),'Entrou na playlist'))setTimeout(()=>spSync(true),700);else if(btn)btn.disabled=false;
+}
+async function moreRecs(btn){
+  if(btn)btn.disabled=true;
+  const pool=Array.from(new Set(S.tracks.concat(RECS).map(t=>String(t.artist||'').split(',')[0].trim()).filter(Boolean))),picks=[];
+  while(picks.length<2&&pool.length)picks.push(pool.splice(Math.floor(Math.random()*pool.length),1)[0]);
+  let got=[];
+  try{for(const a of picks){const r=await spApi('/search?type=track&limit=10&q='+encodeURIComponent('artist:"'+a+'"'));
+      got=got.concat(((r&&r.tracks&&r.tracks.items)||[]).filter(Boolean).map(it=>Object.assign(fromSp(it),{key:'sp-'+it.id})).filter(x=>!S.recsHidden[x.key]&&!S.tracks.some(t=>t.uri===x.uri)&&!S.recX.some(y=>y.uri===x.uri)).slice(0,4))}}
+  catch(e){toast(e&&e.code==='no_auth'?'Conecte o Spotify de novo.':'O Spotify não respondeu. Tente de novo.')}
+  if(got.length){S.recX=got.concat(S.recX).slice(0,40);S.recPage=0;toast(got.length+' sugestões novas de '+picks.join(' e '))}
+  render();
+}
+function recsView(){
+  const all=recList(),size=5,pages=Math.max(1,Math.ceil(all.length/size)),pg=S.recPage%pages,list=all.slice(pg*size,pg*size+size);
+  return[h('div',{class:'vh'},h('h2',{},'Recomendadas'),h('p',{},'Curtiu, entrou na playlist. O X tira a sugestão da lista dos dois.')),
+    list.length?h('ul',{class:'tracks'},list.map(r=>h('li',{},
+      safeUrl(r.cover)?h('img',{class:'cv',src:r.cover,alt:'',width:'40',height:'40',loading:'lazy'}):h('span',{class:'tn'},'♪'),
+      h('div',{class:'tt'},h('b',{},r.title),h('span',{},r.artist),
+        h('div',{class:'row'},(()=>{const b=h('button',{class:'like',type:'button',onclick:()=>likeRec(r,b)},icon('heart'),'Curtir');return b})(),
+          ext(r.link&&safeUrl(r.link)?r.link:spSearch(r.title+' '+r.artist),'Ouvir'),h('button',{class:'x',type:'button','aria-label':'Tirar sugestão',onclick:()=>hideRec(r)},'✕')))))):h('div',{class:'empty'},h('b',{},'Acabaram as sugestões'),h('p',{},spOn()?'Peçam mais ao Spotify no botão abaixo.':'Conectem o Spotify para trazer mais.')),
+    h('div',{class:'row'},pages>1?h('button',{class:'btn ghost small',type:'button',onclick:()=>{S.recPage=pg+1;render()}},'Ver outras'):null,
+      spOn()?(()=>{const b=h('button',{class:'btn ghost small',type:'button',onclick:()=>moreRecs(b)},'Trazer mais do Spotify');return b})():null)];
+}
 
 /* ---------- playlist ---------- */
 function manualTrackSheet(){
@@ -901,13 +988,14 @@ function playlistView(){
     list.length?h('ul',{class:'tracks'},list.map((t,i)=>h('li',{},
       safeUrl(t.cover)?h('img',{class:'cv',src:t.cover,alt:'',width:'40',height:'40',loading:'lazy'}):h('span',{class:'tn'},p2(i+1)),
       h('div',{class:'tt'},h('b',{},t.title),t.artist&&h('span',{},t.artist+(t.sp?' · no Spotify':'')),
-        h('div',{class:'row'},likes('tracks',t),ext(trackUrl(t),'Ouvir'),confirmBtn('Tirar',()=>dropTrack(t))))))):(loadingNote('As faixas')||h('div',{class:'empty'},h('b',{},'Playlist vazia'),h('p',{},'Adicionem a primeira faixa.')))];
+        h('div',{class:'row'},likes('tracks',t),ext(trackUrl(t),'Ouvir'),confirmBtn('Tirar',()=>dropTrack(t))))))):(loadingNote('As faixas')||h('div',{class:'empty'},h('b',{},'Playlist vazia'),h('p',{},'Adicionem a primeira faixa ou curtam uma recomendada.'))),
+    ...(S.db?recsView():[])];
 }
 
 /* ---------- render ---------- */
 let raf=0;const soon=()=>{if(!raf)raf=requestAnimationFrame(()=>{raf=0;render()})};
 function render(){
-  const map={dias:viewDias,reservas:viewReservas,ideias:viewIdeias,decidir:viewDecidir,estrada:viewEstrada,pista:viewPista};
+  const map={dias:viewDias,reservas:viewReservas,ideias:viewIdeias,decidir:viewDecidir,estrada:viewEstrada,jogo:viewJogo,playlist:viewPlaylist};
   $('#view').replaceChildren(...(map[S.tab]||viewDias)().filter(Boolean));
   document.querySelectorAll('#tabs a').forEach(a=>{if(a.getAttribute('href')==='#'+S.tab)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
   const w=$('#who');w.replaceChildren(icon('user'),S.who?pname(S.who):'Quem é você?');
@@ -915,9 +1003,8 @@ function render(){
   if(S.dbState==='locked'){b.hidden=false;b.replaceChildren('Entre com o código da viagem para ver reservas, ideias e playlist. ',h('button',{class:'btn small',type:'button',onclick:codeSheet},'Digitar código'))}
   else{b.hidden=!msg;b.textContent=msg}
   const pl=$('#player'),pid=S.playlistId;
-  if(pid&&pl.dataset.pid!==pid){pl.dataset.pid=pid;pl.replaceChildren(h('iframe',{src:'https://open.spotify.com/embed/playlist/'+pid+'?utm_source=generator',title:'Player do Spotify',height:'152',allow:'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture'}))}
-  if(!pid&&pl.dataset.pid){pl.dataset.pid='';pl.replaceChildren()}
-  pl.hidden=!(pid&&S.tab==='pista');
+  playerMount(pid);
+  pl.hidden=!(pid&&(S.tab==='playlist'||(S.tab==='jogo'&&S.audio==='playlist')));
   tick();
 }
 $('#tabs').replaceChildren(...TABS.map(t=>h('a',{href:'#'+t[0]},icon(t[2]),t[1])));
@@ -941,14 +1028,14 @@ async function connect(code){
   db.collection('days').onSnapshot(s=>{const m={};s.docs.forEach(d=>{m[d.id]=d.data()});S.days=m;soon()});
   db.doc('meta/people').onSnapshot(s=>{const d=s.exists?s.data():{};S.people={a:String(d.a||''),b:String(d.b||'')};soon()});
   db.doc('meta/decisions').onSnapshot(s=>{S.decisions=s.exists?Object.assign({},s.data()):{};soon()});
+  db.doc('meta/recs').onSnapshot(s=>{S.recsHidden=(s.exists&&s.data().hidden)||{};soon()});
   db.doc('meta/scores').onSnapshot(s=>{S.scores=s.exists?Object.assign({},s.data()):{};soon()});
   db.doc('meta/playlist').onSnapshot(s=>{const d=s.exists?s.data():{},u=String(d.url||''),m=/playlist[\/:]([A-Za-z0-9]{10,})/.exec(u);S.playlist=u;S.playlistId=String(d.id||'')||(m?m[1]:'');soon()});
   db.start();render();setTimeout(()=>spSync(true),1500);return true;
 }
 async function boot(){
   const q=new URLSearchParams(location.search),k=q.get('k'),back=await spHandleRedirect(q);
-  if(k||q.get('code')||q.get('error'))history.replaceState(null,'',location.pathname+(back?'#pista':location.hash));
-  if(back)S.sub='playlist';
+  if(k||q.get('code')||q.get('error'))history.replaceState(null,'',location.pathname+(back?'#playlist':location.hash));
   route(true);
   const today=todayBRT();if(S.tab==='dias'&&today>START&&today<=END){const el=document.getElementById('d-'+today);if(el)el.scrollIntoView({block:'start'})}
   if(!CFG.supabaseUrl||!CFG.supabaseKey){S.dbState='absent';render();return}
