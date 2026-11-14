@@ -1086,7 +1086,7 @@ async function boot(){
   route(true);
   const today=todayBRT();if(S.tab==='dias'&&today>START&&today<=END){const el=document.getElementById('d-'+today);if(el)el.scrollIntoView({block:'start'})}
   if(!CFG.supabaseUrl||!CFG.supabaseKey){S.dbState='absent';render();return}
-  const code=k||LS.get('trip');if(!code){S.dbState='locked';render();return}
+  const code=k||CFG.tripCode||LS.get('trip');if(!code){S.dbState='locked';render();return}
   await connect(code);
 }
 boot();
