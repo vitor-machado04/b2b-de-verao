@@ -363,8 +363,8 @@ const LEGS=[
 
 /* ---------- estado ---------- */
 const LS={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
-const S={who:null,people:{a:'',b:''},decisions:{},ideas:[],options:[],checklist:[],stays:[],days:{},db:null,dbState:'loading',readOnly:false,tab:'dias',filter:'todas',scores:{},sound:true,audio:'jogo',tracks:[],playlist:'',recsHidden:{},recX:[],recPage:0,playlistId:'',now:null};
-S.who=LS.get('who');if(S.who!=='a'&&S.who!=='b')S.who=null;S.audio=LS.get('audio')||(LS.get('sound')==='0'?'off':'jogo');if(!['jogo','playlist','off'].includes(S.audio))S.audio='jogo';S.sound=S.audio==='jogo';
+const S={who:null,people:{a:'',b:''},decisions:{},ideas:[],options:[],checklist:[],stays:[],days:{},db:null,dbState:'loading',readOnly:false,tab:'dias',filter:'todas',scores:{},sound:true,audio:'jogo',tracks:[],playlist:'',recsHidden:{},recX:[],recPage:0,pesca:{},game:'estrada',playlistId:'',now:null};
+S.who=LS.get('who');if(S.who!=='a'&&S.who!=='b')S.who=null;S.audio=LS.get('audio')||(LS.get('sound')==='0'?'off':'jogo');if(!['jogo','playlist','off'].includes(S.audio))S.audio='jogo';S.sound=S.audio==='jogo';S.game=LS.get('game');if(S.game!=='estrada'&&S.game!=='pesca')S.game=todayBRT()>=MCP?'pesca':'estrada';
 const TABS=[['dias','Dias','cal'],['reservas','Reservas','bed'],['ideias','Ideias','bulb'],['decidir','Decidir','fork'],['estrada','Estrada','road'],['jogo','Jogo','game'],['playlist','Playlist','eq']];
 const pname=k=>S.people[k]||(k==='a'?'Pessoa 1':'Pessoa 2');
 const safeUrl=u=>/^https?:\/\//i.test(u||'')?u:null;
@@ -675,7 +675,7 @@ function viewEstrada(){
 const BEAT=60/124,GW=320,GH=420,LX=[70,160,250],CY=GH-100,CH=68;
 // trechos da viagem: [km inicial, nome, chance de fila extra de veículos]
 const ZONES=[[0,'Saindo de Curitiba',0],[35,'Serra do Mar',.25],[80,'Rumo a Joinville',.4],[118,'BR-101, litoral',.5],[180,'Balneário Camboriú: trânsito',.8],[205,'Chegando em Cabeçudas',.3]];
-const G={el:null,ov:null,ctx:null,state:'idle',last:0,r:null,pending:0,k:null};
+const G={el:null,ov:null,ctx:null,state:'idle',last:0,r:null,pend:null,k:null};
 const tok=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 let AC=null,NOISE=null;
 function audio(){
@@ -707,11 +707,12 @@ function resumeGame(){audio();if(S.audio==='playlist'&&typeof playerPlay==='func
 function pauseGame(){G.state='paused';overlay({title:'Pausado',msg:'O BYD está no acostamento, no km '+Math.floor(G.r.km)+'.',btn:'Continuar',fn:resumeGame})}
 function move(d){const r=G.r;if(G.state!=='run'||!r)return;r.lane=Math.max(0,Math.min(2,r.lane+d))}
 // guarda o recorde; se a pessoa ainda não disse quem é, fica pendente até ela escolher o nome
-function saveScore(score){
-  if(score!=null)G.pending=Math.max(G.pending||0,score);
-  if(!S.who||!S.db||S.readOnly||!G.pending)return;
-  const v=G.pending;G.pending=0;
-  if(v>(S.scores[S.who]||0))write(db=>upsert(db,'meta/scores',{[S.who]:v}),score==null?'Recorde salvo: '+v+' pontos':'');
+function saveScore(score,which){
+  G.pend=G.pend||{};
+  if(score!=null){const w=which||'scores';G.pend[w]=Math.max(G.pend[w]||0,score)}
+  if(!S.who||!S.db||S.readOnly)return;
+  for(const w of Object.keys(G.pend)){const v=G.pend[w];delete G.pend[w];
+    if(v>((w==='pesca'?S.pesca:S.scores)[S.who]||0))write(db=>upsert(db,'meta/'+w,{[S.who]:v}),score==null?'Recorde salvo: '+v+' pontos':'')}
 }
 function onBeat(r,b){
   beatSound(b,r.drop>0);
@@ -822,7 +823,7 @@ function draw(){
 }
 function frame(ts){
   if(G.state!=='run')return;
-  if(S.tab!=='jogo'||document.hidden){pauseGame();return}
+  if(S.tab!=='jogo'||S.game!=='estrada'||document.hidden){pauseGame();return}
   const dt=Math.min(.05,Math.max(0,(ts-G.last)/1000));G.last=ts;step(dt);
   if(G.state==='run'){draw();requestAnimationFrame(frame)}
 }
@@ -843,7 +844,140 @@ function gameEl(){
   overlay({title:'Rumo a Cabeçudas',msg:'Arraste o dedo: o BYD segue. Bater custa bateria, raio recarrega, disco vale pontos e o disco rosa solta o drop.',btn:'Jogar'});
   return G.el;
 }
-document.addEventListener('keydown',e=>{if(S.tab!=='jogo'||G.state!=='run')return;if(e.key==='ArrowLeft'||e.key==='a'){move(-1);e.preventDefault()}else if(e.key==='ArrowRight'||e.key==='d'){move(1);e.preventDefault()}});
+document.addEventListener('keydown',e=>{if(S.tab!=='jogo'||S.game!=='estrada'||G.state!=='run')return;if(e.key==='ArrowLeft'||e.key==='a'){move(-1);e.preventDefault()}else if(e.key==='ArrowRight'||e.key==='d'){move(1);e.preventDefault()}});
+/* ---------- segundo jogo: Pesca no Amazonas ---------- */
+// Um minuto até o sol se pôr. O anzol segue o dedo; encostou num peixe, ele fisga; levou até a canoa, pontua.
+const FW=320,FH=420,SURF=96,FT=60,FBT=60/96;
+const SPECIES=[
+ {k:'tambaqui',n:'Tambaqui',pts:10,w:1,len:34,hgt:22,spd:[40,70],dep:[130,300],col:'#6E8F7A'},
+ {k:'tucunare',n:'Tucunaré',pts:15,w:1.2,len:40,hgt:16,spd:[70,110],dep:[125,265],col:'#E3B04B'},
+ {k:'dourada',n:'Dourada',pts:25,w:1.6,len:50,hgt:15,spd:[55,85],dep:[225,360],col:'#B9C4CC'},
+ {k:'pirarucu',n:'Pirarucu',pts:50,w:2.6,len:80,hgt:22,spd:[25,40],dep:[305,385],col:'#7D6A5A'}];
+const PIR_OFF=[[0,0],[16,8],[30,-6],[44,6]];
+const F={el:null,ov:null,ctx:null,state:'idle',last:0,r:null};
+const frnd=a=>a[0]+Math.random()*(a[1]-a[0]);
+const mixc=(a,b,t)=>'rgb('+a.map((v,i)=>Math.round(v+(b[i]-v)*t)).join(',')+')';
+const newFish=()=>({t:0,score:0,count:0,combo:0,hx:160,hy:SURF+30,tx:160,ty:SURF+30,cx:160,items:[],carry:null,stun:0,safe:0,shake:0,msg:'',msgT:0,fx:[],next:.3,nextPir:9,nextEel:16,boto:[23+Math.random()*6,45+Math.random()*5],beat:-1,big:null,lost:0});
+function fishOverlay(o){if(!o){F.ov.hidden=true;return}F.ov.hidden=false;F.ov.replaceChildren(...[h('b',{},o.title),h('p',{},o.msg),h('button',{class:'btn',type:'button',onclick:o.fn||fishStart},o.btn||'Pescar de novo')].concat(o.extra||[]).filter(Boolean))}
+function fishGo(){audio();if(S.audio==='playlist'&&typeof playerPlay==='function')playerPlay();F.state='run';F.last=performance.now();fishOverlay(null);requestAnimationFrame(fishFrame)}
+function fishStart(){F.r=newFish();fishGo()}
+function fishPause(){F.state='paused';fishOverlay({title:'Pausado',msg:'A canoa ficou parada no rio. Faltam '+Math.ceil(FT-F.r.t)+' segundos de sol.',btn:'Continuar',fn:fishGo})}
+function fishBeat(b){
+  if(!S.sound||!AC)return;const t=AC.currentTime+.01;
+  if(b%2===0)tone('sine',120,50,t,.2,.3);hat(t+FBT/2,.04);
+  const n=[293.66,349.23,440,392,523.25,440,349.23,392][b%8];tone('triangle',n,null,t,.22,.07);if(b%4===3)tone('triangle',n*1.5,null,t+FBT/2,.18,.05);
+}
+function fishSpawn(r){
+  const roll=Math.random();let sp=roll<.4?SPECIES[0]:roll<.72?SPECIES[1]:roll<.92?SPECIES[2]:SPECIES[3];
+  if(sp.k==='pirarucu'&&r.items.some(i=>i.sp===sp))sp=SPECIES[0];
+  const dir=Math.random()<.5?1:-1;r.items.push({type:'fish',sp,dir,x:dir>0?-sp.len:FW+sp.len,y:frnd(sp.dep),v:frnd(sp.spd),ph:Math.random()*6});
+}
+const fishSay=(r,m,t)=>{r.msg=m;r.msgT=t||1.4};
+function fishStep(dt){
+  const r=F.r;r.t+=dt;for(const k of['stun','safe','shake','msgT'])if(r[k]>0)r[k]=Math.max(0,r[k]-dt);
+  const nb=Math.floor(r.t/FBT);while(r.beat<nb){r.beat++;fishBeat(r.beat)}
+  r.next-=dt;if(r.next<=0){fishSpawn(r);r.next=.55+Math.random()*.6}
+  if(r.t>=r.nextPir){r.nextPir=r.t+4.5+Math.random()*3.5;const dir=Math.random()<.5?1:-1;r.items.push({type:'pir',dir,x:dir>0?-20:FW+20,y:frnd([140,320]),v:frnd([120,160]),ph:0})}
+  if(r.t>=r.nextEel){r.nextEel=r.t+11+Math.random()*5;const dir=Math.random()<.5?1:-1;r.items.push({type:'eel',dir,x:dir>0?-40:FW+40,y:frnd([335,390]),v:50,ph:0})}
+  if(r.boto.length&&r.t>=r.boto[0]){r.boto.shift();const dir=Math.random()<.5?1:-1;r.items=r.items.filter(i=>i.type!=='pir');r.items.push({type:'boto',dir,x:dir>0?-50:FW+50,y:SURF+36,v:95,ph:0});fishSay(r,'O boto passou e espantou as piranhas',2);blip(523,784)}
+  if(r.stun<=0){const sp=r.carry?300/r.carry.sp.w:340,dx=r.tx-r.hx,dy=r.ty-r.hy,d=Math.hypot(dx,dy),m=Math.min(d,sp*dt);if(d>.5){r.hx+=dx/d*m;r.hy+=dy/d*m}}
+  r.cx+=(r.hx-r.cx)*Math.min(1,dt*5);
+  if(r.carry&&r.hy<=SURF+8){const sp=r.carry.sp;r.combo++;const m=Math.min(3,1+Math.floor((r.combo-1)/3)),p=sp.pts*m;r.score+=p;r.count++;if(!r.big||sp.pts>r.big.pts)r.big=sp;
+    r.fx.push({x:r.hx,y:SURF-10,text:'+'+p+(m>1?' x'+m:''),t:1});fishSay(r,sp.n+' na canoa!',1.2);r.carry=null;buzz(20);if(S.sound&&AC){blip(660,880);tone('triangle',990,null,AC.currentTime+.12,.15,.08)}}
+  for(const it of r.items){
+    it.x+=it.dir*it.v*dt;it.ph+=dt*4;const dx=it.x-r.hx,dy=it.y+Math.sin(it.ph)*3-r.hy;
+    if(it.type==='fish'){if(!r.carry&&r.stun<=0&&Math.abs(dx)<it.sp.len/2+4&&Math.abs(dy)<it.sp.hgt/2+7){r.carry=it;it.gone=true;blip(440,660);buzz(12)}}
+    else if(it.type==='pir'){if(r.carry&&PIR_OFF.some(o=>Math.hypot(dx-o[0]*it.dir,dy+o[1])<16)){fishSay(r,'As piranhas levaram o '+r.carry.sp.n.toLowerCase(),1.6);r.carry=null;r.combo=0;r.lost++;r.shake=.3;buzz(60);if(S.sound&&AC)tone('sawtooth',200,70,AC.currentTime+.01,.22,.1)}}
+    else if(it.type==='eel'){if(r.safe<=0&&Math.abs(dx)<40&&Math.abs(dy)<12){r.stun=1.3;r.safe=2.4;r.shake=.4;r.combo=0;if(r.carry){r.carry=null;r.lost++}fishSay(r,'Choque do poraquê!',1.4);buzz(120);if(S.sound&&AC){hat(AC.currentTime+.01,.2);tone('square',900,120,AC.currentTime+.01,.3,.06)}}}
+  }
+  r.items=r.items.filter(it=>!it.gone&&it.x>-140&&it.x<FW+140);
+  for(const f of r.fx){f.t-=dt;f.y-=30*dt}
+  r.fx=r.fx.filter(f=>f.t>0);
+  if(r.t>=FT){r.t=FT;return fishEnd()}
+}
+function fishEnd(){
+  const r=F.r,score=r.score;F.state='over';r.shake=0;fishDraw();
+  if(S.sound&&AC){blip(523,392);tone('triangle',293.66,null,AC.currentTime+.16,.4,.09)}
+  const rec=!!S.who&&score>(S.pesca[S.who]||0);
+  const parts=[r.count?(r.count===1?'1 peixe na canoa.':r.count+' peixes na canoa.'):'Nenhum peixe dessa vez.',r.big?'O maior foi um '+r.big.n.toLowerCase()+'.':'',r.lost?(r.lost===1?'1 escapou.':r.lost+' escaparam.'):'',score+' pontos'+(rec?', recorde novo!':'.')];
+  fishOverlay({title:'O sol se pôs no Amazonas',msg:parts.filter(Boolean).join(' '),extra:[S.who?null:h('button',{class:'btn ghost small',type:'button',onclick:whoSheet},'Dizer quem sou e salvar os pontos')]});
+  saveScore(score,'pesca');
+}
+function drawFish(c,sp,x,y,dir){
+  const L=sp.len,H=sp.hgt;c.save();c.translate(x,y);c.scale(dir,1);
+  c.fillStyle=sp.col;c.beginPath();c.moveTo(-L/2+4,0);c.lineTo(-L/2-L*.2,-H*.5);c.lineTo(-L/2-L*.2,H*.5);c.closePath();c.fill();
+  c.beginPath();c.ellipse(0,0,L/2,H/2,0,0,6.2832);c.fill();
+  if(sp.k==='tucunare'){c.fillStyle='rgba(42,53,66,.5)';for(const sx of[-9,-1,7])c.fillRect(sx-1.5,-H*.4,3,H*.8)}
+  if(sp.k==='tambaqui'){c.fillStyle='rgba(42,53,66,.32)';c.beginPath();c.ellipse(0,1,L/2-2,H/2-2,0,0,Math.PI);c.fill()}
+  if(sp.k==='pirarucu'){c.fillStyle='rgba(200,85,61,.75)';c.beginPath();c.ellipse(-L*.27,0,L*.2,H/2-2,0,0,6.2832);c.fill()}
+  if(sp.k==='piranha'){c.fillStyle='#D64B3A';c.beginPath();c.ellipse(0,1,L/2-2,H/2-1,0,0,Math.PI);c.fill()}
+  c.fillStyle='#FFFFFF';c.beginPath();c.arc(L/2-6,-H*.14,2.5,0,6.2832);c.fill();c.fillStyle='#2A3542';c.beginPath();c.arc(L/2-5.6,-H*.14,1.2,0,6.2832);c.fill();
+  c.restore();
+}
+const PIRANHA={k:'piranha',len:20,hgt:13,col:'#8C97A1'};
+function fishDraw(){
+  const c=F.ctx,r=F.r||newFish(),p=Math.min(1,r.t/FT),K=G.k||{};
+  const leaf=tok('--leaf'),ink=tok('--ink'),bg=tok('--bg'),bolt=tok('--bolt');
+  c.save();if(r.shake>0)c.translate((Math.random()-.5)*6,(Math.random()-.5)*6);
+  c.fillStyle=p<.6?mixc([214,236,246],[255,220,186],p/.6):mixc([255,220,186],[246,176,170],(p-.6)/.4);c.fillRect(-10,-10,FW+20,SURF+12);
+  c.fillStyle=bolt;c.beginPath();c.arc(250,56+(SURF-62)*p,18,0,6.2832);c.fill();
+  c.fillStyle=leaf;c.fillRect(-10,SURF-8,FW+20,10);for(let i=0;i<17;i++){c.beginPath();c.arc(i*21-6+(i*7)%9,SURF-7,11+(i*13)%8,Math.PI,0);c.fill()}
+  const g=c.createLinearGradient(0,SURF,0,FH);g.addColorStop(0,'#EFE5CF');g.addColorStop(1,'#CDBB97');c.fillStyle=g;c.fillRect(-10,SURF,FW+20,FH);
+  c.strokeStyle='rgba(255,255,255,.6)';c.lineWidth=1.5;c.beginPath();for(let i=0;i<6;i++){const x=(i*61+r.t*14)%(FW+40)-20,y=SURF+7+(i%3)*5;c.moveTo(x,y);c.lineTo(x+18,y)}c.stroke();
+  c.fillStyle='#B19B72';c.beginPath();c.moveTo(-10,FH+10);c.lineTo(-10,FH-10);for(let x=0;x<=FW+10;x+=40)c.quadraticCurveTo(x+20,FH-22+(x%80?6:0),x+40,FH-10);c.lineTo(FW+10,FH+10);c.closePath();c.fill();
+  c.strokeStyle=leaf;c.globalAlpha=.55;c.lineWidth=3;c.lineCap='round';c.beginPath();for(const x of[26,34,150,158,268,290]){c.moveTo(x,FH-8);c.quadraticCurveTo(x+Math.sin(r.t*1.5+x)*5,FH-30,x+Math.sin(r.t*1.5+x)*8,FH-44-(x%3)*6)}c.stroke();c.globalAlpha=1;
+  for(const it of r.items){const y=it.y+Math.sin(it.ph)*3;
+    if(it.type==='fish')drawFish(c,it.sp,it.x,y,it.dir);
+    else if(it.type==='pir')for(const o of PIR_OFF)drawFish(c,PIRANHA,it.x-o[0]*it.dir,it.y+o[1]+Math.sin(it.ph+o[0])*2,it.dir);
+    else if(it.type==='eel'){c.lineCap='round';for(const[w,col]of[[9,'#5E5438'],[3,'#E3B04B']]){c.strokeStyle=col;c.lineWidth=w;c.beginPath();for(let i=0;i<=8;i++){const px=it.x-it.dir*i*9,py=it.y+Math.sin(it.ph+i*.8)*4+(w===3?2:0);if(i)c.lineTo(px,py);else c.moveTo(px,py)}c.stroke()}}
+    else{c.save();c.translate(it.x,y);c.scale(it.dir,1);c.fillStyle='#F2A7B8';c.beginPath();c.ellipse(0,0,30,11,0,0,6.2832);c.fill();c.beginPath();c.ellipse(32,2,12,3.5,0,0,6.2832);c.fill();
+      c.beginPath();c.moveTo(-6,-9);c.lineTo(2,-17);c.lineTo(8,-9);c.closePath();c.fill();c.beginPath();c.moveTo(-28,0);c.lineTo(-42,-9);c.lineTo(-42,9);c.closePath();c.fill();
+      c.fillStyle=ink;c.beginPath();c.arc(18,-3,1.5,0,6.2832);c.fill();c.restore()}}
+  // linha, anzol e o que estiver fisgado
+  const tipX=r.cx+24,tipY=SURF-30;
+  c.strokeStyle=ink;c.globalAlpha=.55;c.lineWidth=1.2;c.beginPath();c.moveTo(tipX,tipY);c.lineTo(r.hx,r.hy-6);c.stroke();c.globalAlpha=1;
+  c.strokeStyle=ink;c.lineWidth=2;c.beginPath();c.moveTo(r.hx,r.hy-6);c.lineTo(r.hx,r.hy);c.arc(r.hx-4,r.hy,4,0,Math.PI);c.stroke();
+  if(r.carry)drawFish(c,r.carry.sp,r.hx,r.hy+r.carry.sp.hgt/2+3,r.carry.dir);
+  if(r.stun>0){c.strokeStyle=bolt;c.lineWidth=2.5;c.beginPath();for(let i=0;i<5;i++){const a=i*1.26+r.t*9;c.moveTo(r.hx+Math.cos(a)*8,r.hy+Math.sin(a)*8);c.lineTo(r.hx+Math.cos(a)*17,r.hy+Math.sin(a)*17)}c.stroke()}
+  // canoa com os dois
+  c.fillStyle='#8A5A3C';c.beginPath();c.moveTo(r.cx-36,SURF-7);c.quadraticCurveTo(r.cx,SURF+13,r.cx+36,SURF-7);c.closePath();c.fill();
+  c.fillStyle=tok('--sea');rr(c,r.cx-16,SURF-19,10,13,3);c.fill();c.fillStyle=tok('--heart');rr(c,r.cx+3,SURF-19,10,13,3);c.fill();
+  c.fillStyle=ink;c.beginPath();c.arc(r.cx-11,SURF-24,5,0,6.2832);c.fill();c.beginPath();c.arc(r.cx+8,SURF-24,5,0,6.2832);c.fill();
+  c.strokeStyle='#8A5A3C';c.lineWidth=2;c.beginPath();c.moveTo(r.cx+10,SURF-14);c.lineTo(tipX,tipY);c.stroke();
+  c.textBaseline='middle';c.textAlign='center';c.font='700 13px Figtree,system-ui,sans-serif';
+  for(const f of r.fx){c.globalAlpha=Math.min(1,f.t*2);c.fillStyle=ink;c.fillText(f.text,Math.max(40,Math.min(280,f.x)),f.y)}
+  c.globalAlpha=.85;c.fillStyle=bg;rr(c,30,8,260,26,13);c.fill();c.globalAlpha=1;
+  c.font='500 13px "DM Mono",ui-monospace,monospace';c.fillStyle=ink;c.textAlign='left';c.fillText(Math.ceil(FT-r.t)+' s',42,22);
+  c.textAlign='center';c.fillText(r.score+' pts',160,22);c.textAlign='right';c.fillText(r.count+(r.count===1?' peixe':' peixes'),278,22);
+  if(r.msgT>0){c.fillStyle=bg;c.globalAlpha=.92;rr(c,30,FH-46,260,30,15);c.fill();c.globalAlpha=1;c.fillStyle=ink;c.textAlign='center';c.font='600 13px Figtree,system-ui,sans-serif';c.fillText(r.msg,160,FH-30,240)}
+  c.restore();
+}
+function fishFrame(ts){
+  if(F.state!=='run')return;
+  if(S.tab!=='jogo'||S.game!=='pesca'||document.hidden){fishPause();return}
+  const dt=Math.min(.05,Math.max(0,(ts-F.last)/1000));F.last=ts;fishStep(dt);
+  if(F.state==='run'){fishDraw();requestAnimationFrame(fishFrame)}
+}
+function fishEl(){
+  if(F.el)return F.el;
+  const cv=h('canvas',{class:'g-cv',role:'img','aria-label':'Jogo: canoa no Rio Amazonas com peixes passando embaixo'}),dpr=Math.min(2,window.devicePixelRatio||1);
+  cv.width=FW*dpr;cv.height=FH*dpr;F.ctx=cv.getContext('2d');F.ctx.scale(dpr,dpr);
+  // o anzol vai para onde o dedo está, um pouco acima para não ficar escondido
+  const aim=e=>{const r=F.r;if(F.state!=='run'||!r)return;const b=cv.getBoundingClientRect();
+    r.tx=Math.max(14,Math.min(FW-14,(e.clientX-b.left)/b.width*FW));r.ty=Math.max(SURF+6,Math.min(FH-14,(e.clientY-b.top)/b.height*FH-(e.pointerType==='mouse'?0:30)))};
+  let down=false;
+  cv.addEventListener('pointerdown',e=>{down=true;try{cv.setPointerCapture(e.pointerId)}catch(_){}aim(e)});
+  cv.addEventListener('pointermove',e=>{if(down||e.pointerType==='mouse')aim(e)});
+  ['pointerup','pointercancel'].forEach(t=>cv.addEventListener(t,()=>{down=false}));
+  ['touchstart','touchmove','touchend'].forEach(t=>cv.addEventListener(t,e=>{if(e.cancelable)e.preventDefault()},{passive:false}));
+  ['dblclick','gesturestart','contextmenu'].forEach(t=>cv.addEventListener(t,e=>e.preventDefault()));
+  F.ov=h('div',{class:'g-ov'});F.el=h('div',{class:'game'},cv,F.ov);fishDraw();
+  fishOverlay({title:'Pesca no Amazonas',msg:'Arraste o dedo na água: o anzol vai atrás. Fisgou, puxe até a canoa antes do sol se pôr.',btn:'Pescar',fn:fishStart});
+  return F.el;
+}
+document.addEventListener('keydown',e=>{const r=F.r;if(S.tab!=='jogo'||S.game!=='pesca'||F.state!=='run'||!r)return;
+  const d={ArrowLeft:[-26,0],ArrowRight:[26,0],ArrowUp:[0,-26],ArrowDown:[0,26]}[e.key];if(!d)return;e.preventDefault();
+  r.tx=Math.max(14,Math.min(FW-14,r.tx+d[0]));r.ty=Math.max(SURF+6,Math.min(FH-14,r.ty+d[1]))});
 const spSearch=q=>'https://open.spotify.com/search/'+encodeURIComponent(q);
 const trackUrl=t=>safeUrl(t.link)||spSearch([t.title,t.artist].filter(Boolean).join(' '));
 function setAudio(m){
@@ -852,14 +986,17 @@ function setAudio(m){
   if(typeof playerPlay==='function'){if(m==='playlist')playerPlay();else playerPause()}
   render();
 }
+function setGame(g){S.game=g;LS.set('game',g);render()}
 function viewJogo(){
-  const best=k=>S.scores[k]?S.scores[k]+' pts':'sem recorde';
-  return[h('div',{class:'vh'},h('h2',{},'Rumo a Cabeçudas'),h('p',{},'Os 214 km de Curitiba até o hotel em menos de um minuto, a 124 bpm. Pontos: km rodados, discos (em sequência valem mais), raspões e a bateria que sobrar na chegada.')),
-    gameEl(),
+  const pesca=S.game==='pesca',sc=pesca?S.pesca:S.scores,best=k=>sc[k]?sc[k]+' pts':'sem recorde';
+  return[h('div',{class:'vh'},h('h2',{},pesca?'Pesca no Amazonas':'Rumo a Cabeçudas'),
+      h('p',{},pesca?'Um minuto até o sol se pôr no rio. Peixe grande vale mais e pesa mais na linha. A piranha rouba o que estiver no anzol e o poraquê dá choque.':'Os 214 km de Curitiba até o hotel em menos de um minuto, a 124 bpm. Pontos: km rodados, discos (em sequência valem mais), raspões e a bateria que sobrar na chegada.')),
+    h('div',{class:'chips',role:'group','aria-label':'Qual jogo'},[['estrada','Estrada'],['pesca','Pesca no rio']].map(o=>h('button',{class:'chip',type:'button','aria-pressed':String(S.game===o[0]),onclick:()=>setGame(o[0])},o[1]))),
+    pesca?fishEl():gameEl(),
     h('div',{class:'chips',role:'group','aria-label':'Som do jogo',style:'justify-content:center'},[['jogo','Som do jogo'],['playlist','Nossa playlist'],['off','Sem som']].map(o=>h('button',{class:'chip',type:'button','aria-pressed':String(S.audio===o[0]),onclick:()=>setAudio(o[0])},o[1]))),
     S.audio==='playlist'&&h('p',{class:'note',style:'text-align:center'},'A playlist toca no player do Spotify no topo desta tela. Se não começar sozinha, toque no play dele.'),
     S.now&&h('p',{class:'note',style:'text-align:center'},'Tocando no seu Spotify: '+S.now.title+' · '+S.now.artist),
-    h('div',{class:'card'},h('span',{class:'mono'},'Recordes'),h('ul',{class:'legs'},['a','b'].map(k=>h('li',{},h('span',{},pname(k)+(S.who===k?' (você)':'')),h('b',{},best(k))))),
+    h('div',{class:'card'},h('span',{class:'mono'},pesca?'Recordes da pesca':'Recordes da estrada'),h('ul',{class:'legs'},['a','b'].map(k=>h('li',{},h('span',{},pname(k)+(S.who===k?' (você)':'')),h('b',{},best(k))))),
       !S.who&&h('p',{class:'note'},'Toque em “Quem é você?” lá em cima para o seu recorde entrar no placar.'))];
 }
 function viewPlaylist(){return[h('div',{class:'vh'},h('h2',{},'Playlist'),h('p',{},'A trilha da viagem, montada pelos dois.')),...playlistView()]}
@@ -1126,6 +1263,7 @@ async function connect(code){
   db.doc('meta/people').onSnapshot(s=>{const d=s.exists?s.data():{};S.people={a:String(d.a||''),b:String(d.b||'')};soon()});
   db.doc('meta/decisions').onSnapshot(s=>{S.decisions=s.exists?Object.assign({},s.data()):{};soon()});
   db.doc('meta/recs').onSnapshot(s=>{S.recsHidden=(s.exists&&s.data().hidden)||{};soon()});
+  db.doc('meta/pesca').onSnapshot(s=>{S.pesca=s.exists?Object.assign({},s.data()):{};soon()});
   db.doc('meta/scores').onSnapshot(s=>{S.scores=s.exists?Object.assign({},s.data()):{};soon()});
   db.doc('meta/playlist').onSnapshot(s=>{const d=s.exists?s.data():{},u=String(d.url||''),m=/playlist[\/:]([A-Za-z0-9]{10,})/.exec(u);S.playlist=u;S.playlistId=String(d.id||'')||(m?m[1]:'');soon()});
   db.start();render();setTimeout(()=>spSync(true),1500);return true;
