@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
 <meta name="referrer" content="no-referrer">
-<meta name="theme-color" content="#FFFFFF">
+<meta name="theme-color" content="#FFFCF6">
 <meta name="apple-mobile-web-app-title" content="B2B de Verão">
 <title>B2B de Verão</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23E8F4FC'/%3E%3Cg stroke='%231783C4' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M8 14v4M13 9v14M19 12v8M24 7v18'/%3E%3C/g%3E%3C/svg%3E">
@@ -16,12 +16,12 @@
 /* Layout: página branca e arejada, uma coluna de celular. O topo tem a luz de um amanhecer de pista aberta;
    a faixa de dias é um equalizador (barra mais alta = dia de festa). Um tema só, claro, de propósito. */
 :root{
-  --bg:#FFFFFF; --surface:#F5F8FA; --surface-2:#E9EFF3; --ink:#2A3542; --ink-2:#6B7885; --line:#E3E9EE;
-  --sea:#1783C4; --sea-light:#9AD1F0; --sea-soft:#E8F4FC; --on-sea:#FFFFFF;
-  --sun:#F28B5B; --sun-ink:#B5532A; --sun-soft:#FFF1E9; --pink:#F4A6C0; --heart:#D9487A;
+  --bg:#FFFCF6; --surface:#FFFFFF; --surface-2:#F3EADB; --ink:#12364A; --ink-2:#5B7482; --line:#EFE6D8;
+  --sea:#0B7F96; --sea-light:#8EDCE6; --sea-soft:#E0F6F8; --on-sea:#FFFFFF;
+  --sun:#F2734B; --sun-ink:#B4441F; --sun-soft:#FFEDE3; --pink:#FFB9A6; --heart:#D9487A;
   --ok:#23805A; --ok-soft:#E8F6EF; --bolt:#FFD76A;
-  --grey:#97A3AE; --grey-soft:#EFF2F5; --scrim:rgba(42,53,66,.35); --veil:rgba(255,255,255,.86);
-  --dawn:linear-gradient(120deg,#FFEDE2 0%,#FDEAF2 48%,#E6F3FC 100%);
+  --grey:#97A3AE; --grey-soft:#EFF2F5; --scrim:rgba(18,54,74,.35); --veil:rgba(255,255,255,.86);
+  --dawn:linear-gradient(120deg,#FFE9C9 0%,#FFE0D6 48%,#D3F1F4 100%);
   --f-display:"Unbounded","Trebuchet MS",system-ui,sans-serif;
   --f-body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-mono:"DM Mono",ui-monospace,"SF Mono",Menlo,monospace;
@@ -35,7 +35,7 @@
   --sun:#E0962A; --sun-ink:#8F570A; --sun-soft:#FFF3DA; --pink:#B9D98C; --grey-soft:#EBF0EA;
   --dawn:linear-gradient(120deg,#E2F3DD 0%,#EAF6EC 52%,#FFF2D0 100%);
 }
-body,.tabs,.tabs a,.strip,.card,.btn,.chip,.who,.pass,.callout,.dnum,.day,.dchip .bar,.dot{transition:background-color .5s ease,color .5s ease,border-color .5s ease}
+body,.tabs,.tabs a,.strip,.card,.btn,.chip,.who,.pass,.callout,.dnum,.day,.dchip .bar,.dot{transition:background-color .5s ease,color .5s ease,border-color .5s ease,-webkit-text-stroke-color .5s ease}
 @media (prefers-reduced-motion: reduce){body,.tabs,.tabs a,.strip,.card,.btn,.chip,.who,.pass,.callout,.dnum,.day,.dchip .bar,.dot{transition:none}}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font:400 16px/1.5 var(--f-body);-webkit-text-size-adjust:100%}
@@ -265,17 +265,22 @@ span.like{background:transparent}
 .picks{display:grid;gap:6px;max-height:38vh;overflow:auto}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:50;background:var(--ink);color:var(--bg);border-radius:999px;padding:10px 16px;font-size:.88rem;font-weight:600;max-width:calc(100% - 32px);text-align:center}
 
-/* ===== Meio do Mundo: o endereço só de Macapá =====
-   Página clara com poucos acentos fortes: verde-mata profundo (barra de abas e painel de contagem),
-   ouro do rio e roxo de açaí. O topo é uma cena viva do Amazonas com a linha do Equador. */
-:root{--deep:#0F3B2B;--gold:#F6BE3A;--glass:rgba(255,255,255,.88);--shadow:rgba(15,59,43,.22);--shadow-soft:rgba(15,59,43,.07);--c1:#0E7A52;--c2:#D9981F;--c3:#7A2E8E;--c4:#1479B8}
+/* ===== Pele do site =====
+   A estrutura é uma só (cena viva no topo, painel flutuante, números vazados, barra de abas escura e flutuante).
+   Muda a paleta: praia de verão na primeira parte; floresta (classe mcp-site) quando o roteiro chega em Macapá
+   e no endereço do grupo. */
+:root{--deep:#0F3A4F;--gold:#FFC53D;--glass:rgba(255,255,255,.88);--shadow:rgba(15,58,79,.2);--shadow-soft:rgba(15,58,79,.07);--c1:#0E7A52;--c2:#D9981F;--c3:#7A2E8E;--c4:#1479B8}
 :root.mcp-site{--bg:#F7FAF2;--surface:#FFFFFF;--surface-2:#E4EFE0;--ink:#14352A;--ink-2:#55705F;--line:#DCE9D6;
-  --sea:#0E7A52;--sea-light:#9FD9B4;--sea-soft:#E3F4E6;--sun:#E2A32B;--sun-ink:#8A5A08;--sun-soft:#FFF4D9;--pink:#D3B3E0;--heart:#7A2E8E;--grey-soft:#EDF2EA}
-.mcp-site body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(80% 40% at 100% 0,#E9F5E0 0,transparent 70%),radial-gradient(70% 34% at 0 46%,#FFF6DC 0,transparent 70%),radial-gradient(70% 34% at 100% 100%,#E6F3EA 0,transparent 70%)}
-.mcp-site .app{padding-bottom:128px}
-.mcp-site .top .brand{color:var(--sea);font-size:.78rem}
+  --sea:#0E7A52;--sea-light:#9FD9B4;--sea-soft:#E3F4E6;--sun:#E2A32B;--sun-ink:#8A5A08;--sun-soft:#FFF4D9;--pink:#D3B3E0;--heart:#7A2E8E;--grey-soft:#EDF2EA;
+  --deep:#0F3B2B;--gold:#F6BE3A;--shadow:rgba(15,59,43,.22);--shadow-soft:rgba(15,59,43,.07)}
+body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(80% 40% at 100% 0,#DDF5F7 0,transparent 70%),radial-gradient(70% 34% at 0 46%,#FFEFD9 0,transparent 70%),radial-gradient(70% 34% at 100% 100%,#FFE7DE 0,transparent 70%)}
+.mcp-site body::after{background:radial-gradient(80% 40% at 100% 0,#E9F5E0 0,transparent 70%),radial-gradient(70% 34% at 0 46%,#FFF6DC 0,transparent 70%),radial-gradient(70% 34% at 100% 100%,#E6F3EA 0,transparent 70%)}
+.app{padding-bottom:128px}
+.top .brand{color:var(--sea);font-size:.78rem}
 
-/* cena do topo */
+/* cenas do topo: cada uma guarda as próprias cores, não importa a paleta ativa */
+.mh-beach{--deep:#0F3A4F;--sea:#0B7F96;--sea-light:#8EDCE6;--gold:#FFC53D;--shadow:rgba(15,58,79,.2)}
+.mh-mcp{--deep:#0F3B2B;--sea:#0E7A52;--sea-light:#9FD9B4;--gold:#F6BE3A;--shadow:rgba(15,59,43,.22);scroll-margin-top:calc(96px + env(safe-area-inset-top,0px))}
 .mh{position:relative;height:420px;overflow:hidden;border-radius:30px;margin-left:calc(-1*max(8px,env(safe-area-inset-left,0px) - 8px));margin-right:calc(-1*max(8px,env(safe-area-inset-right,0px) - 8px))}
 .mh-scene,.mh-scene svg{position:absolute;inset:0;width:100%;height:100%;display:block}
 .mh-copy{position:relative;z-index:2;padding:24px 20px 0;display:grid;gap:8px;color:var(--deep)}
@@ -285,22 +290,25 @@ span.like{background:transparent}
 .mh-title span:last-child{color:var(--sea)}
 .mh-tag{font-size:.95rem;font-weight:500;max-width:20ch}
 .pl1{transform:translateY(calc(var(--sy,0)*.3px))}.pl2{transform:translateY(calc(var(--sy,0)*.2px))}.pl3{transform:translateY(calc(var(--sy,0)*.12px))}.pl5{transform:translateY(calc(var(--sy,0)*-.1px))}
-.mh .glow{transform-origin:292px 250px;animation:mhglow 5s ease-in-out infinite alternate}
+.mh .glow{transform-box:fill-box;transform-origin:center;animation:mhglow 5s ease-in-out infinite alternate}
 .mh .bob{animation:mhbob 4.5s ease-in-out infinite alternate}
 .mh .drift{animation:mhdrift 18s ease-in-out infinite alternate}
 .mh .sway{animation:mhsway 6s ease-in-out infinite alternate}
 .mh .shim{animation:mhshim 2.6s ease-in-out infinite alternate}
 .mh .fly{animation:mhfly 30s linear infinite}
+.mh .foam{animation:mhfoam 5s ease-in-out infinite alternate}
 @keyframes mhglow{to{transform:scale(1.12);opacity:.4}}
 @keyframes mhbob{to{transform:translateY(2.5px)}}
 @keyframes mhdrift{from{transform:translateX(-26px)}to{transform:translateX(30px)}}
 @keyframes mhsway{from{transform:rotate(-2.4deg)}to{transform:rotate(2.4deg)}}
-@keyframes mhshim{from{opacity:.25}to{opacity:.7}}
+@keyframes mhshim{from{opacity:.25}to{opacity:.75}}
 @keyframes mhfly{from{transform:translateX(-60px)}to{transform:translateX(460px)}}
-@media (prefers-reduced-motion: reduce){.mh .glow,.mh .bob,.mh .drift,.mh .sway,.mh .shim,.mh .fly{animation:none}.pl1,.pl2,.pl3,.pl5{transform:none}}
+@keyframes mhfoam{from{transform:translate(-8px,0)}to{transform:translate(8px,5px)}}
+@media (prefers-reduced-motion: reduce){.mh .glow,.mh .bob,.mh .drift,.mh .sway,.mh .shim,.mh .fly,.mh .foam{animation:none}.pl1,.pl2,.pl3,.pl5{transform:none}}
 
-/* painel de contagem e tripulação */
+/* painel flutuante: contagem e tripulação em Macapá, cartão de embarque na praia */
 .mh-panel{position:relative;z-index:3;margin-top:-46px;margin-inline:8px;background:var(--glass);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-radius:26px;padding:14px;display:grid;gap:14px;box-shadow:0 16px 40px var(--shadow)}
+.pass.mh-float{position:relative;z-index:3;margin:-46px 8px 0;border:0;border-radius:26px;box-shadow:0 16px 40px var(--shadow)}
 .mh-cd{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
 .mh-cd div{background:var(--deep);color:var(--on-sea);border-radius:16px;padding:11px 4px 9px;display:grid;justify-items:center;gap:3px;min-width:0}
 .mh-cd b{font-family:var(--f-display);font-weight:500;font-size:1.55rem;line-height:1;font-variant-numeric:tabular-nums}
@@ -315,34 +323,48 @@ span.like{background:transparent}
 .crew span{font-size:.74rem;font-weight:600;text-align:center;overflow-wrap:anywhere;line-height:1.15}
 
 /* dias */
-.mcp-site .strip{border-bottom:0;grid-auto-columns:minmax(30px,1fr);background:var(--glass);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-radius:0 0 18px 18px;padding-inline:6px}
-.mcp-site .dchip .bar{width:12px;border-radius:9px 9px 3px 9px;background:linear-gradient(var(--sea-light),var(--sea))}
-.mcp-site .dchip.gone .bar{background:var(--grey)}
-.mcp-site .day{border-top:0;padding-top:8px}
-.mcp-site .day .dnum{font-weight:700;font-size:3.1rem;color:transparent;-webkit-text-stroke:1.6px var(--sea)}
-.mcp-site .day.today .dnum{color:var(--gold);-webkit-text-stroke:0}
-.mcp-site .tl::before{border-left:2px solid var(--sea-light)}
-.mcp-site .dot{width:12px;height:12px;border:0;border-radius:0 70% 0 70%;background:var(--sea);transform:rotate(-8deg)}
-.mcp-site .k-idea .dot{background:var(--gold)}
-.mcp-site button.ent{border-radius:18px 18px 18px 6px;box-shadow:0 8px 22px var(--shadow-soft)}
-.mcp-site .match{color:var(--heart)!important}
+.strip{border-bottom:0;background:var(--glass);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-radius:0 0 18px 18px;padding-inline:6px}
+.mc-mode .strip{grid-auto-columns:minmax(30px,1fr)}
+.dchip .bar{width:10px;border-radius:9px 9px 3px 9px;background:linear-gradient(var(--sea-light),var(--sea))}
+.dchip.mcp .bar{background:linear-gradient(var(--leaf-light),var(--leaf))}
+.dchip.gone .bar{background:var(--grey)}
+.day{border-top:0;padding-top:8px}
+.day .dnum{font-weight:700;font-size:3.1rem;color:transparent;-webkit-text-stroke:1.6px var(--sea)}
+.day.mcp .dnum{color:transparent;-webkit-text-stroke-color:var(--leaf)}
+.day.sad .dnum{color:transparent;-webkit-text-stroke-color:var(--grey)}
+.day.today .dnum{color:var(--gold);-webkit-text-stroke:0}
+.tl::before{border-left:2px solid var(--sea-light)}
+.dot{width:12px;height:12px;border:3px solid var(--sea);background:var(--surface)}
+.k-flight .dot,.k-drive .dot{background:var(--sea);border-color:var(--sea)}
+.k-show .dot{background:var(--sun);border-color:var(--sun)}
+.k-idea .dot{background:var(--gold);border-color:var(--gold)}
+.mcp-site .dot,.mcp-site .k-flight .dot,.mcp-site .k-drive .dot{border:0;border-radius:0 70% 0 70%;background:var(--sea);transform:rotate(-8deg)}
+.mcp-site .k-idea .dot{border:0;border-radius:0 70% 0 70%;background:var(--gold)}
+button.ent{border-radius:18px 18px 18px 6px;box-shadow:0 8px 22px var(--shadow-soft)}
+.match{color:var(--heart)!important}
+.ticket{border-radius:24px 24px 24px 8px;box-shadow:0 10px 30px var(--shadow-soft)}
+.callout{border-radius:22px 22px 22px 8px}
 
 /* cartões, botões, abas */
-.mcp-site .card,.mcp-site .empty{border-radius:26px 26px 26px 8px;box-shadow:0 10px 30px var(--shadow-soft)}
-.mcp-site .card.both{box-shadow:inset 0 0 0 2px var(--pink),0 10px 30px var(--shadow-soft)}
-.mcp-site .pass{border:0;border-radius:24px;box-shadow:0 10px 30px var(--shadow-soft)}
-.mcp-site .vh h2::before{content:"";display:inline-block;width:.58em;height:.58em;margin-right:.42em;background:var(--gold);border-radius:0 70% 0 70%;transform:rotate(-12deg)}
-.mcp-site .btn{background:var(--deep)}
-.mcp-site .btn.ghost{background:var(--surface);color:var(--ink)}
-.mcp-site .btn.dashed{background:var(--sea-soft);color:var(--sea)}
-.mcp-site .btn.danger{color:var(--heart)}
-.mcp-site .chip[aria-pressed="true"]{background:var(--deep);color:var(--on-sea);border-color:var(--deep)}
-.mcp-site .like.on{border-color:var(--pink);color:var(--heart)}
-.mcp-site .tabs{left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));max-width:620px;margin:0 auto;padding:0 6px;border:0;border-radius:24px;background:var(--deep);box-shadow:0 14px 34px var(--shadow)}
-.mcp-site .tabs div{grid-template-columns:repeat(5,minmax(0,1fr))}
-.mcp-site .tabs a{color:var(--sea-light);font-size:.66rem;padding:10px 0 9px}
-.mcp-site .tabs a[aria-current]{color:var(--gold)}
-.mcp-site .toast{bottom:calc(100px + env(safe-area-inset-bottom,0px))}
+.card,.empty{border-radius:26px 26px 26px 8px;box-shadow:0 10px 30px var(--shadow-soft)}
+.card.both{box-shadow:inset 0 0 0 2px var(--pink),0 10px 30px var(--shadow-soft)}
+.pass{border:0;border-radius:24px;box-shadow:0 10px 30px var(--shadow-soft)}
+.vh h2::before{content:"";display:inline-block;width:.56em;height:.56em;margin-right:.42em;background:var(--gold);border-radius:50%;box-shadow:0 0 0 .14em var(--sun-soft)}
+.mcp-site .vh h2::before{border-radius:0 70% 0 70%;transform:rotate(-12deg);box-shadow:none}
+.btn{background:var(--deep)}
+.btn.ghost{background:var(--surface);color:var(--ink)}
+.btn.dashed{background:var(--sea-soft);color:var(--sea)}
+.btn.danger{color:var(--heart)}
+.add{color:var(--sea)}
+.chip{background:var(--surface)}
+.chip[aria-pressed="true"]{background:var(--deep);color:var(--on-sea);border-color:var(--deep)}
+.like.on{border-color:var(--pink);color:var(--heart)}
+.tabs{left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));max-width:620px;margin:0 auto;padding:0 6px;border:0;border-radius:24px;background:var(--deep);box-shadow:0 14px 34px var(--shadow)}
+.mc-mode .tabs div{grid-template-columns:repeat(5,minmax(0,1fr))}
+.tabs a{color:var(--sea-light);padding:10px 0 9px}
+.mc-mode .tabs a{font-size:.66rem}
+.tabs a[aria-current]{color:var(--gold)}
+.toast{bottom:calc(100px + env(safe-area-inset-bottom,0px))}
 .rank{list-style:none;padding:0;display:grid;gap:6px}
 .rank li{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:8px;align-items:center;padding:10px 12px;border-radius:14px;background:var(--bg)}
 .rank li:first-child{background:var(--sun-soft)}
@@ -643,12 +665,15 @@ const momentSheet=(d,cur)=>textSheet('Momento de '+fmtDay(d),MC?'Uma frase sobre
 
 /* ---------- telas ---------- */
 function hero(){
-  return h('section',{class:'hero'},h('p',{class:'mono'},'27 dez 2026 → 19 jan 2027 · 24 dias · 23 noites'),h('h1',{},'B2B de ',h('em',{},'Verão')),h('p',{class:'tag'},'Dois no mesmo set: Curitiba, Cabeçudas e Macapá.'),
-    pass({from:['MCP','Macapá'],to:['CWB','Curitiba'],fields:[['data','dom 27/12'],['pouso','23:50'],['juntos','22d 3h10']],
-      stub:[h('span',{class:'cd-big',id:'cd-big'}),h('span',{class:'cd-unit',id:'cd-unit'}),h('span',{class:'cd-rest',id:'cd-rest'}),h('p',{class:'cd-cap',id:'cd-cap'})]}));
+  const scene=h('div',{class:'mh-scene'});scene.innerHTML=beachScene();
+  const card=pass({from:['MCP','Macapá'],to:['CWB','Curitiba'],fields:[['data','dom 27/12'],['pouso','23:50'],['juntos','22d 3h10']],
+    stub:[h('span',{class:'cd-big',id:'cd-big'}),h('span',{class:'cd-unit',id:'cd-unit'}),h('span',{class:'cd-rest',id:'cd-rest'}),h('p',{class:'cd-cap',id:'cd-cap'})]});
+  card.classList.add('mh-float');
+  return h('div',{class:'mh-beach'},h('section',{class:'mh'},scene,
+      h('div',{class:'mh-copy'},h('p',{class:'mh-kicker'},'27 dez 2026 → 19 jan 2027 · 24 dias'),h('h1',{class:'mh-title'},h('span',{},'B2B'),h('span',{},'de Verão')),h('p',{class:'mh-tag'},'Praia, pista e depois o meio do mundo.'))),card);
 }
 function tick(){
-  if(MC)return tickMc();
+  tickMc();if(MC)return;
   const big=$('#cd-big');if(!big)return;const now=Date.now(),set=(a,b,c,d)=>{big.textContent=a;$('#cd-unit').textContent=b;$('#cd-rest').textContent=c;$('#cd-cap').textContent=d};
   const split=ms=>{const s=Math.max(0,Math.floor(ms/1e3));return[Math.floor(s/86400),Math.floor(s%86400/3600),Math.floor(s%3600/60),s%60]};
   if(now<LAND){const[d,hh,m,s]=split(LAND-now);set(String(d),d===1?'dia':'dias',p2(hh)+'h '+p2(m)+'m '+p2(s)+'s','até o pouso em Curitiba')}
@@ -669,7 +694,7 @@ function mcpCard(){
     h('p',{},'Os dois no mesmo voo para o outro lado do mapa: beira do Amazonas, linha do Equador e floresta.'),
     pass({from:['CWB','Curitiba'],to:['MCP','Macapá'],fields:[['data','dom 10/01'],['decolagem','05:25'],['pouso','14:10']]}));
 }
-function viewDias(){const today=todayBRT();return[MC?mcHero():hero(),dayStrip(today),...DAYS.flatMap((d,i)=>d===MCP&&!MC?[mcpCard(),daySection(d,i,today)]:[daySection(d,i,today)])]}
+function viewDias(){const today=todayBRT();return[MC?mcHero():hero(),dayStrip(today),...DAYS.flatMap((d,i)=>{if(d!==MCP||MC)return[daySection(d,i,today)];const m=mcHero();m.id='mcp-start';return[m,daySection(d,i,today)]})]}
 // tema: na aba Dias, vira floresta quando a parte de Macapá entra na tela; nas outras abas, durante os dias em Macapá
 let amazonOn=null,themeQ=0;
 function syncStrip(smooth){
@@ -680,8 +705,8 @@ function syncStrip(smooth){
 function themeCheck(){
   const el=document.getElementById('mcp-start'),t=todayBRT(),on=MC||(S.tab==='dias'&&el?el.getBoundingClientRect().top<window.innerHeight*.62:t>=MCP&&t<=END);
   if(on===amazonOn)return;amazonOn=on;
-  document.documentElement.classList.toggle('amazon',on);G.k=null;if(G.el&&G.state!=='run')draw();
-  const m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',on?'#FBFDF8':'#FFFFFF');
+  document.documentElement.classList.toggle('amazon',on);document.documentElement.classList.toggle('mcp-site',on);G.k=null;if(G.el&&G.state!=='run')draw();
+  const m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',on?'#F7FAF2':'#FFFCF6');
   syncStrip(true);
 }
 window.addEventListener('scroll',()=>{if(!themeQ)themeQ=requestAnimationFrame(()=>{themeQ=0;themeCheck()})},{passive:true});
@@ -881,13 +906,13 @@ function endGame(kind){
 function rr(c,x,y,w,hh,rad){c.beginPath();c.moveTo(x+rad,y);c.arcTo(x+w,y,x+w,y+hh,rad);c.arcTo(x+w,y+hh,x,y+hh,rad);c.arcTo(x,y+hh,x,y,rad);c.arcTo(x,y,x+w,y,rad);c.closePath()}
 function draw(){
   const c=G.ctx,r=G.r||newRun();
-  const K=G.k||(G.k={sea:tok('--sea'),seaLight:tok('--sea-light'),seaSoft:tok('--sea-soft'),sun:tok('--sun'),sunSoft:tok('--sun-soft'),road:tok('--surface'),dash:tok('--grey'),greySoft:tok('--grey-soft'),green:tok('--ok-soft'),
+  const K=G.k||(G.k={sea:tok('--sea'),seaLight:tok('--sea-light'),seaSoft:tok('--sea-soft'),sun:tok('--sun'),sunSoft:tok('--sun-soft'),road:tok('--grey-soft'),dash:tok('--grey'),greySoft:tok('--grey-soft'),green:tok('--ok-soft'),
     ink:tok('--ink'),ink2:tok('--ink-2'),bolt:tok('--bolt'),bg:tok('--bg'),pink:tok('--pink'),heart:tok('--heart'),line:tok('--surface-2')});
   const z=r.zone,ph=(r.t/BEAT)%1,pulse=Math.max(0,1-ph*2.5);
   c.save();if(r.shake>0)c.translate((Math.random()-.5)*7,(Math.random()-.5)*7);
   c.clearRect(-10,-10,GW+20,GH+20);
-  c.fillStyle=z===0?K.greySoft:z<3?K.green:K.seaSoft;c.fillRect(-10,-10,35,GH+20);
-  c.fillStyle=z===0?K.greySoft:z===1?K.green:K.sunSoft;c.fillRect(295,-10,35,GH+20);
+  c.fillStyle=z===0?K.line:z<3?K.green:K.seaSoft;c.fillRect(-10,-10,35,GH+20);
+  c.fillStyle=z===0?K.line:z===1?K.green:K.sunSoft;c.fillRect(295,-10,35,GH+20);
   c.fillStyle=K.road;c.fillRect(25,-10,270,GH+20);
   if(r.drop>0){c.fillStyle=K.pink;c.globalAlpha=.1+.16*pulse;c.fillRect(25,-10,270,GH+20);c.globalAlpha=1}
   const off=(r.t*(230+r.km*.9))%48;
@@ -1349,10 +1374,31 @@ function mcScene(){
    +'<g class="pl5"><g transform="translate(-6 430)"><g class="sway">'+leaf(0,0,24,1.15,'#0E5C3D')+leaf(18,6,52,.95,'#17804F')+leaf(-4,4,-2,.8,'#0E5C3D')+'</g></g>'
    +'<g transform="translate(406 -8)"><g class="sway" style="animation-delay:-2s">'+leaf(0,0,205,1.1,'#0E5C3D')+leaf(-14,-4,232,.85,'#17804F')+'</g></g></g></svg>';
 }
+function beachScene(){
+  let seed=5;const rnd=()=>(seed=(seed*1664525+1013904223)>>>0)/4294967296;
+  const frond=(rot,len,fill)=>'<g transform="rotate('+rot+')"><path d="M0 0C'+(len*.3).toFixed(0)+' -22 '+(len*.75).toFixed(0)+' -20 '+len+' 6C'+(len*.7).toFixed(0)+' 4 '+(len*.3).toFixed(0)+' 12 0 0Z" fill="'+fill+'"/></g>';
+  let waves='';for(let i=0;i<7;i++){const x=20+rnd()*340,y=270+i*9+rnd()*4,w=14+rnd()*22;waves+='M'+x.toFixed(0)+' '+y.toFixed(0)+'h'+w.toFixed(0)}
+  let foam='M-30 336';for(let x=-30;x<430;x+=30)foam+='q15 -10 30 0';foam+='V348H-30Z';
+  return'<svg viewBox="0 0 400 420" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><defs><linearGradient id="bsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A5E6F2"/><stop offset=".6" stop-color="#D8F5F3"/><stop offset="1" stop-color="#FFF1D4"/></linearGradient><linearGradient id="bsea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1FA9C0"/><stop offset="1" stop-color="#8FE3E6"/></linearGradient><linearGradient id="bsand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FDEDCB"/><stop offset="1" stop-color="#F2D49E"/></linearGradient><clipPath id="bumb"><path d="M-50 0A50 36 0 0 1 50 0Z"/></clipPath></defs>'
+   +'<rect width="400" height="420" fill="url(#bsky)"/>'
+   +'<g class="pl1"><circle class="glow" cx="304" cy="118" r="78" fill="#FFD76A" opacity=".3"/><circle cx="304" cy="118" r="46" fill="#FFC53D"/></g>'
+   +'<g class="pl1"><g class="drift" fill="#FFFFFF" opacity=".85"><ellipse cx="150" cy="232" rx="34" ry="8"/><ellipse cx="174" cy="226" rx="22" ry="8"/><ellipse cx="344" cy="238" rx="26" ry="6"/></g></g>'
+   +'<g class="pl1"><g class="fly"><path d="M0 64q6-8 12 0q6-8 12 0M44 48q5-7 10 0q5-7 10 0" fill="none" stroke="#12364A" stroke-width="1.8" stroke-linecap="round"/></g></g>'
+   +'<g class="pl2"><path d="M-20 266C6 238 44 228 80 244C100 252 118 262 138 266Z" fill="#2F9567"/><path d="M-20 266C2 252 30 248 56 256C70 260 82 264 94 266Z" fill="#11704A"/><path d="M330 266q22 -14 50 -5q14 3 30 5Z" fill="#5DB788"/></g>'
+   +'<rect y="264" width="400" height="78" fill="url(#bsea)"/>'
+   +'<g class="pl3"><g transform="translate(232 264)"><g class="drift"><path d="M-14 0h28l-5 6h-18z" fill="#FFFFFF"/><path d="M0 -2V-26L13 -4Z" fill="#FFFFFF"/><path d="M-2 -4V-20L-11 -4Z" fill="#FF8A6B"/></g></g></g>'
+   +'<path class="shim" d="'+waves+'" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" fill="none"/>'
+   +'<rect y="340" width="400" height="82" fill="url(#bsand)"/><g class="foam"><path d="'+foam+'" fill="#FFFFFF"/></g>'
+   +'<g transform="translate(118 398)"><path d="M0 0V-58" stroke="#12364A" stroke-width="2.4" stroke-linecap="round"/><g transform="translate(0 -58)"><g clip-path="url(#bumb)"><rect x="-50" y="-36" width="100" height="36" fill="#F2734B"/><rect x="-32" y="-36" width="16" height="36" fill="#FFFFFF"/><rect x="-8" y="-36" width="16" height="36" fill="#FFFFFF"/><rect x="16" y="-36" width="16" height="36" fill="#FFFFFF"/></g></g>'
+   +'<rect x="-52" y="-6" width="40" height="12" rx="3" fill="#1FA9C0" transform="rotate(-4)"/><rect x="14" y="-4" width="40" height="12" rx="3" fill="#FFC53D" transform="rotate(3)"/></g>'
+   +'<g transform="translate(212 372)"><rect x="-17" y="-20" width="34" height="20" rx="4" fill="#12364A"/><circle cx="-8" cy="-10" r="5" fill="#FFFFFF" opacity=".9"/><circle cx="8" cy="-10" r="5" fill="#FFFFFF" opacity=".9"/><g class="shim" stroke="#FF8A6B" stroke-width="2.4" stroke-linecap="round"><path d="M-12 -26v-5M-4 -26v-10M4 -26v-7M12 -26v-12"/></g></g>'
+   +'<g class="pl5"><g transform="translate(-12 -14)"><g class="sway">'+frond(10,112,'#11704A')+frond(27,124,'#2F9567')+frond(44,100,'#11704A')+frond(-6,92,'#2F9567')+'</g></g>'
+   +'<g transform="translate(412 430)"><g class="sway" style="animation-delay:-3s">'+frond(200,120,'#11704A')+frond(222,140,'#2F9567')+frond(246,110,'#11704A')+'</g></g></g></svg>';
+}
 function mcHero(){
   const scene=h('div',{class:'mh-scene'});scene.innerHTML=mcScene();
   const ini=k=>{const nm=String(S.people[k]||'').trim();return nm?nm[0].toUpperCase():'+'};
-  return h('div',{},h('section',{class:'mh'},scene,
+  return h('div',{class:'mh-mcp'},h('section',{class:'mh'},scene,
       h('div',{class:'mh-copy'},h('p',{class:'mh-kicker'},'10 → 19 jan 2027 · Curitiba → Macapá'),h('h1',{class:'mh-title'},h('span',{},'Meio'),h('span',{},'do Mundo')),h('p',{class:'mh-tag'},'Quatro pessoas, dez dias, zero grau de latitude.'))),
     h('div',{class:'mh-panel'},
       h('div',{class:'mh-cd',role:'timer','aria-label':'Contagem'},[['d','dias'],['h','horas'],['m','min'],['s','seg']].map(c=>h('div',{},h('b',{id:'mc-'+c[0]},'00'),h('span',{},c[1])))),
@@ -1378,7 +1424,8 @@ function rankCard(){
   return h('div',{class:'card'},h('span',{class:'mono'},'Ranking da pesca'),h('ol',{class:'rank'},rows.map((r,i)=>h('li',{},h('i',{},(i+1)+'º'),h('span',{},pname(r.k)+(S.who===r.k?' (você)':'')),h('b',{},r.v?r.v+' pts':'sem recorde')))),
     !S.who&&h('p',{class:'note'},'Toque em “Quem é você?” lá em cima para o seu recorde entrar no ranking.'));
 }
-if(MC)window.addEventListener('scroll',()=>{const m=document.querySelector('.mh');if(m&&window.scrollY<560)m.style.setProperty('--sy',String(Math.round(window.scrollY)))},{passive:true});
+// as camadas das cenas deslizam em velocidades diferentes enquanto a cena está na tela
+window.addEventListener('scroll',()=>{for(const m of document.querySelectorAll('.mh')){const r=m.getBoundingClientRect();if(r.bottom>-40&&r.top<window.innerHeight+40)m.style.setProperty('--sy',String(Math.round(Math.max(-260,Math.min(560,80-r.top)))))}},{passive:true});
 
 /* ---------- render ---------- */
 let raf=0;const soon=()=>{if(!raf)raf=requestAnimationFrame(()=>{raf=0;render()})};
@@ -1398,7 +1445,7 @@ function render(){
 }
 $('#tabs').replaceChildren(...TABS.map(t=>h('a',{href:'#'+t[0]},icon(t[2]),t[1])));
 $('#who').addEventListener('click',whoSheet);
-if(MC){document.documentElement.classList.add('mcp-site','amazon');document.querySelector('.brand').textContent='Meio do Mundo'}
+if(MC){document.documentElement.classList.add('mcp-site','amazon','mc-mode');document.querySelector('.brand').textContent='Meio do Mundo'}
 function route(first){const t=location.hash.slice(1);const ok=TABS.some(x=>x[0]===t);const next=ok?t:'dias';if(next!==S.tab||first){S.tab=next;render();if(!first)window.scrollTo(0,0)}}
 window.addEventListener('hashchange',()=>route(false));
 setInterval(tick,1000);
