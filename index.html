@@ -265,6 +265,91 @@ span.like{background:transparent}
 .picks{display:grid;gap:6px;max-height:38vh;overflow:auto}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:50;background:var(--ink);color:var(--bg);border-radius:999px;padding:10px 16px;font-size:.88rem;font-weight:600;max-width:calc(100% - 32px);text-align:center}
 
+/* ===== Meio do Mundo: o endereço só de Macapá =====
+   Página clara com poucos acentos fortes: verde-mata profundo (barra de abas e painel de contagem),
+   ouro do rio e roxo de açaí. O topo é uma cena viva do Amazonas com a linha do Equador. */
+:root{--deep:#0F3B2B;--gold:#F6BE3A;--glass:rgba(255,255,255,.88);--shadow:rgba(15,59,43,.22);--shadow-soft:rgba(15,59,43,.07);--c1:#0E7A52;--c2:#D9981F;--c3:#7A2E8E;--c4:#1479B8}
+:root.mcp-site{--bg:#F7FAF2;--surface:#FFFFFF;--surface-2:#E4EFE0;--ink:#14352A;--ink-2:#55705F;--line:#DCE9D6;
+  --sea:#0E7A52;--sea-light:#9FD9B4;--sea-soft:#E3F4E6;--sun:#E2A32B;--sun-ink:#8A5A08;--sun-soft:#FFF4D9;--pink:#D3B3E0;--heart:#7A2E8E;--grey-soft:#EDF2EA}
+.mcp-site body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(80% 40% at 100% 0,#E9F5E0 0,transparent 70%),radial-gradient(70% 34% at 0 46%,#FFF6DC 0,transparent 70%),radial-gradient(70% 34% at 100% 100%,#E6F3EA 0,transparent 70%)}
+.mcp-site .app{padding-bottom:128px}
+.mcp-site .top .brand{color:var(--sea);font-size:.78rem}
+
+/* cena do topo */
+.mh{position:relative;height:420px;overflow:hidden;border-radius:30px;margin-left:calc(-1*max(8px,env(safe-area-inset-left,0px) - 8px));margin-right:calc(-1*max(8px,env(safe-area-inset-right,0px) - 8px))}
+.mh-scene,.mh-scene svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.mh-copy{position:relative;z-index:2;padding:24px 20px 0;display:grid;gap:8px;color:var(--deep)}
+.mh-kicker{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase}
+.mh-title{font-family:var(--f-display);font-weight:700;font-size:clamp(2.3rem,11.4vw,3.6rem);line-height:.94;letter-spacing:-.03em;text-transform:uppercase}
+.mh-title span{display:block}
+.mh-title span:last-child{color:var(--sea)}
+.mh-tag{font-size:.95rem;font-weight:500;max-width:20ch}
+.pl1{transform:translateY(calc(var(--sy,0)*.3px))}.pl2{transform:translateY(calc(var(--sy,0)*.2px))}.pl3{transform:translateY(calc(var(--sy,0)*.12px))}.pl5{transform:translateY(calc(var(--sy,0)*-.1px))}
+.mh .glow{transform-origin:292px 250px;animation:mhglow 5s ease-in-out infinite alternate}
+.mh .bob{animation:mhbob 4.5s ease-in-out infinite alternate}
+.mh .drift{animation:mhdrift 18s ease-in-out infinite alternate}
+.mh .sway{animation:mhsway 6s ease-in-out infinite alternate}
+.mh .shim{animation:mhshim 2.6s ease-in-out infinite alternate}
+.mh .fly{animation:mhfly 30s linear infinite}
+@keyframes mhglow{to{transform:scale(1.12);opacity:.4}}
+@keyframes mhbob{to{transform:translateY(2.5px)}}
+@keyframes mhdrift{from{transform:translateX(-26px)}to{transform:translateX(30px)}}
+@keyframes mhsway{from{transform:rotate(-2.4deg)}to{transform:rotate(2.4deg)}}
+@keyframes mhshim{from{opacity:.25}to{opacity:.7}}
+@keyframes mhfly{from{transform:translateX(-60px)}to{transform:translateX(460px)}}
+@media (prefers-reduced-motion: reduce){.mh .glow,.mh .bob,.mh .drift,.mh .sway,.mh .shim,.mh .fly{animation:none}.pl1,.pl2,.pl3,.pl5{transform:none}}
+
+/* painel de contagem e tripulação */
+.mh-panel{position:relative;z-index:3;margin-top:-46px;margin-inline:8px;background:var(--glass);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-radius:26px;padding:14px;display:grid;gap:14px;box-shadow:0 16px 40px var(--shadow)}
+.mh-cd{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.mh-cd div{background:var(--deep);color:var(--on-sea);border-radius:16px;padding:11px 4px 9px;display:grid;justify-items:center;gap:3px;min-width:0}
+.mh-cd b{font-family:var(--f-display);font-weight:500;font-size:1.55rem;line-height:1;font-variant-numeric:tabular-nums}
+.mh-cd span{font-size:.6rem;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--sea-light)}
+.mh-cap{font-size:.9rem;color:var(--ink-2);text-align:center}
+.crew{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.crew button{border:0;background:transparent;padding:0;display:grid;justify-items:center;align-content:start;gap:5px;min-width:0;color:var(--ink);touch-action:manipulation}
+.crew i{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-family:var(--f-display);font-weight:500;font-size:1rem;color:var(--on-sea);background:var(--c1)}
+.crew button:nth-child(2) i{background:var(--c2)}.crew button:nth-child(3) i{background:var(--c3)}.crew button:nth-child(4) i{background:var(--c4)}
+.crew button.none i{opacity:.5}
+.crew .me i{box-shadow:0 0 0 3px var(--surface),0 0 0 5.5px var(--gold)}
+.crew span{font-size:.74rem;font-weight:600;text-align:center;overflow-wrap:anywhere;line-height:1.15}
+
+/* dias */
+.mcp-site .strip{border-bottom:0;grid-auto-columns:minmax(30px,1fr);background:var(--glass);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-radius:0 0 18px 18px;padding-inline:6px}
+.mcp-site .dchip .bar{width:12px;border-radius:9px 9px 3px 9px;background:linear-gradient(var(--sea-light),var(--sea))}
+.mcp-site .dchip.gone .bar{background:var(--grey)}
+.mcp-site .day{border-top:0;padding-top:8px}
+.mcp-site .day .dnum{font-weight:700;font-size:3.1rem;color:transparent;-webkit-text-stroke:1.6px var(--sea)}
+.mcp-site .day.today .dnum{color:var(--gold);-webkit-text-stroke:0}
+.mcp-site .tl::before{border-left:2px solid var(--sea-light)}
+.mcp-site .dot{width:12px;height:12px;border:0;border-radius:0 70% 0 70%;background:var(--sea);transform:rotate(-8deg)}
+.mcp-site .k-idea .dot{background:var(--gold)}
+.mcp-site button.ent{border-radius:18px 18px 18px 6px;box-shadow:0 8px 22px var(--shadow-soft)}
+.mcp-site .match{color:var(--heart)!important}
+
+/* cartões, botões, abas */
+.mcp-site .card,.mcp-site .empty{border-radius:26px 26px 26px 8px;box-shadow:0 10px 30px var(--shadow-soft)}
+.mcp-site .card.both{box-shadow:inset 0 0 0 2px var(--pink),0 10px 30px var(--shadow-soft)}
+.mcp-site .pass{border:0;border-radius:24px;box-shadow:0 10px 30px var(--shadow-soft)}
+.mcp-site .vh h2::before{content:"";display:inline-block;width:.58em;height:.58em;margin-right:.42em;background:var(--gold);border-radius:0 70% 0 70%;transform:rotate(-12deg)}
+.mcp-site .btn{background:var(--deep)}
+.mcp-site .btn.ghost{background:var(--surface);color:var(--ink)}
+.mcp-site .btn.dashed{background:var(--sea-soft);color:var(--sea)}
+.mcp-site .btn.danger{color:var(--heart)}
+.mcp-site .chip[aria-pressed="true"]{background:var(--deep);color:var(--on-sea);border-color:var(--deep)}
+.mcp-site .like.on{border-color:var(--pink);color:var(--heart)}
+.mcp-site .tabs{left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));max-width:620px;margin:0 auto;padding:0 6px;border:0;border-radius:24px;background:var(--deep);box-shadow:0 14px 34px var(--shadow)}
+.mcp-site .tabs div{grid-template-columns:repeat(5,minmax(0,1fr))}
+.mcp-site .tabs a{color:var(--sea-light);font-size:.66rem;padding:10px 0 9px}
+.mcp-site .tabs a[aria-current]{color:var(--gold)}
+.mcp-site .toast{bottom:calc(100px + env(safe-area-inset-bottom,0px))}
+.rank{list-style:none;padding:0;display:grid;gap:6px}
+.rank li{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:8px;align-items:center;padding:10px 12px;border-radius:14px;background:var(--bg)}
+.rank li:first-child{background:var(--sun-soft)}
+.rank i{font-style:normal;font-family:var(--f-display);font-weight:500;color:var(--ink-2)}
+.rank li:first-child i{color:var(--sun-ink)}
+.rank b{font-family:var(--f-mono);font-weight:500;font-size:.85rem;white-space:nowrap}
+
 /* base que o claude.ai fornecia */
 :root{padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
 html{-webkit-tap-highlight-color:transparent}
@@ -312,6 +397,8 @@ const IC={
  road:'<path d="M8 3L5 21M16 3l3 18M12 5v3M12 11v3M12 17v3"/>',
  out:'<path d="M10 5H5v14h14v-5M14 4h6v6M20 4l-9 9"/>',
  user:'<circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/>',
+ check:'<path d="M5 12l5 5 9-10"/>',
+ fish:'<path d="M3 12c3-5 9-6 13-3l5-4v14l-5-4c-4 3-10 2-13-3z"/><path d="M8 11h.01"/>',
  game:'<rect x="3" y="8" width="18" height="10" rx="5"/><path d="M8 11v4M6 13h4M15.5 12h.01M18 14.5h.01"/>'
 };
 const icon=n=>{const s=document.createElementNS('http://www.w3.org/2000/svg','svg');s.setAttribute('viewBox','0 0 24 24');s.setAttribute('class','ic');s.setAttribute('aria-hidden','true');s.innerHTML=IC[n];return s};
@@ -319,8 +406,10 @@ function h(tag,attrs,...kids){const e=document.createElement(tag);for(const k in
   for(const kid of kids.flat(Infinity)){if(kid==null||kid===false||kid==='')continue;e.append(kid.nodeType?kid:document.createTextNode(kid))}return e}
 
 /* ---------- datas (tudo em horário de Brasília, UTC-3) ---------- */
+// 'macapa' = endereço do grupo, que só mostra de 10 a 19/01; sem modo = a viagem inteira
+const MC=(window.TRIP_CONFIG||{}).mode==='macapa';
 const START='2026-12-27',END='2027-01-19',MCP='2027-01-10',DAYS=[];
-for(let t=Date.parse(START+'T12:00:00Z');t<=Date.parse(END+'T12:00:00Z');t+=864e5)DAYS.push(new Date(t).toISOString().slice(0,10));
+for(let t=Date.parse((MC?MCP:START)+'T12:00:00Z');t<=Date.parse(END+'T12:00:00Z');t+=864e5)DAYS.push(new Date(t).toISOString().slice(0,10));
 const WD=['domingo','segunda','terça','quarta','quinta','sexta','sábado'],WDS=['dom','seg','ter','qua','qui','sex','sáb'],MO=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
 const dparts=d=>{const x=new Date(d+'T12:00:00Z');return{wd:x.getUTCDay(),day:x.getUTCDate(),mo:x.getUTCMonth()}};
 const p2=n=>String(n).padStart(2,'0');
@@ -344,8 +433,8 @@ const SHOWS=[
 const FIXED=[
  {day:START,t:'23:50',show:'23:50',kind:'flight',title:'Pouso em Curitiba',sub:'O voo de Macapá chega no Afonso Pena (CWB). Do aeroporto ao apê são 16,5 km, uns 22 min.'},
  {day:'2026-12-28',t:'14:00',show:'tarde',kind:'drive',title:'Estrada: Curitiba → Cabeçudas',sub:'214 km no BYD, cerca de 3h15 sem trânsito. Depois do almoço.',tab:'estrada'},
- {day:MCP,t:'03:30',show:'~03:30',kind:'drive',title:'Chegar no Afonso Pena',sub:'Os dois embarcam. O BYD fica em Curitiba até o dia 19.'},
- {day:MCP,t:'05:25',show:'05:25',kind:'flight',title:'Decolagem para Macapá',sub:'CWB → MCP, os dois no mesmo voo.'},
+ {day:MCP,t:'03:30',show:'~03:30',kind:'drive',title:'Chegar no Afonso Pena',sub:MC?'Embarque do grupo em Curitiba.':'Os dois embarcam. O BYD fica em Curitiba até o dia 19.'},
+ {day:MCP,t:'05:25',show:'05:25',kind:'flight',title:'Decolagem para Macapá',sub:MC?'CWB → MCP.':'CWB → MCP, os dois no mesmo voo.'},
  {day:MCP,t:'14:10',show:'14:10',kind:'flight',title:'Pouso em Macapá',sub:'O app da reserva mostra clima entre 24° e 30° C.'},
  {day:END,t:'01:00',show:'~01:00',kind:'drive',title:'Chegar no aeroporto de Macapá',sub:'Melhor estar lá umas duas horas antes.'},
  {day:END,t:'03:00',show:'03:00',kind:'flight',title:'Decolagem para Curitiba',sub:'MCP → CWB, com pouso às 13:10.'}
@@ -363,16 +452,22 @@ const LEGS=[
 
 /* ---------- estado ---------- */
 const LS={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
-const S={who:null,people:{a:'',b:''},decisions:{},ideas:[],options:[],checklist:[],stays:[],days:{},db:null,dbState:'loading',readOnly:false,tab:'dias',filter:'todas',scores:{},sound:true,audio:'jogo',tracks:[],playlist:'',recsHidden:{},recX:[],recPage:0,pesca:{},game:'estrada',playlistId:'',now:null};
-S.who=LS.get('who');if(S.who!=='a'&&S.who!=='b')S.who=null;S.audio=LS.get('audio')||(LS.get('sound')==='0'?'off':'jogo');if(!['jogo','playlist','off'].includes(S.audio))S.audio='jogo';S.sound=S.audio==='jogo';S.game=LS.get('game');if(S.game!=='estrada'&&S.game!=='pesca')S.game=todayBRT()>=MCP?'pesca':'estrada';
-const TABS=[['dias','Dias','cal'],['reservas','Reservas','bed'],['ideias','Ideias','bulb'],['decidir','Decidir','fork'],['estrada','Estrada','road'],['jogo','Jogo','game'],['playlist','Playlist','eq']];
-const pname=k=>S.people[k]||(k==='a'?'Pessoa 1':'Pessoa 2');
+const S={who:null,people:{a:'',b:'',c:'',d:''},decisions:{},ideas:[],options:[],checklist:[],stays:[],days:{},db:null,dbState:'loading',readOnly:false,tab:'dias',filter:'todas',scores:{},sound:true,audio:'jogo',tracks:[],playlist:'',recsHidden:{},recX:[],recPage:0,pesca:{},game:'estrada',playlistId:'',now:null};
+S.who=LS.get('who');if(S.who!=='a'&&S.who!=='b')S.who=null;S.audio=LS.get('audio')||(LS.get('sound')==='0'?'off':'jogo');if(!['jogo','playlist','off'].includes(S.audio))S.audio='jogo';S.sound=S.audio==='jogo';S.game=LS.get('game');if(S.game!=='estrada'&&S.game!=='pesca')S.game=todayBRT()>=MCP?'pesca':'estrada';if(MC)S.game='pesca';
+const TABS=MC?[['dias','Dias','cal'],['reservas','Voos','plane'],['ideias','Ideias','bulb'],['decidir','Lista','check'],['jogo','Pesca','fish']]:[['dias','Dias','cal'],['reservas','Reservas','bed'],['ideias','Ideias','bulb'],['decidir','Decidir','fork'],['estrada','Estrada','road'],['jogo','Jogo','game'],['playlist','Playlist','eq']];
+const ALLP=['a','b','c','d'];
+const pname=k=>S.people[k]||'Pessoa '+(ALLP.indexOf(k)+1);
+// quem vota em cada coisa: na parte de Macapá são os quatro; no resto, os dois
+const crewOf=doc=>doc&&doc.region==='macapa'?ALLP.filter(k=>MC||k<'c'||S.people[k]):['a','b'];
+const allLabel=doc=>crewOf(doc).length>2?'Todos curtiram':'Os dois curtiram';
+// o que nasce em dia de Macapá (ou no endereço do grupo) fica marcado, para aparecer nos dois endereços
+const reg=day=>MC||(day&&day>=MCP)?{region:'macapa'}:{};
 const safeUrl=u=>/^https?:\/\//i.test(u||'')?u:null;
 const maps=q=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q);
 const mapsDir=(a,b)=>'https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent(a)+'&destination='+encodeURIComponent(b);
 const ext=(url,label,cls)=>h('a',{class:cls||'btn ghost small',href:url,target:'_blank',rel:'noopener'},label,icon('out'));
 const byOrder=(a,b)=>(a.order||0)-(b.order||0);
-const both=d=>!!(d.likes&&d.likes.a&&d.likes.b);
+const both=d=>{const L=d.likes||{};return crewOf(d).every(k=>L[k])};
 const allStays=()=>STAYS0.concat(S.stays.map(s=>({id:s.id,db:!s.fixed,kind:s.kind||'Hospedagem',name:s.name||'Hospedagem',city:s.city||'',cin:[s.cinDay,s.cinTime||'15:00'],cout:[s.coutDay,s.coutTime||'12:00'],addr:s.addr,link:s.link,phone:s.phone,phoneLabel:s.phoneLabel,linkLabel:s.linkLabel,notes:s.notes})).filter(s=>s.cin[0]&&s.cout[0]));
 const stayFor=d=>allStays().find(s=>s.cin[0]<=d&&d<s.cout[0]);
 
@@ -391,12 +486,13 @@ async function write(fn,ok){
 }
 async function upsert(db,path,data){const ref=db.doc(path);const s=await ref.get();if(s.exists)await ref.update(data);else await ref.set(data)}
 function myLike(coll,doc){if(!S.who){whoSheet();return}const cur=!!(doc.likes&&doc.likes[S.who]);write(db=>db.doc(coll+'/'+doc.id).update({likes:{[S.who]:!cur}}))}
-function likes(coll,doc){const L=doc.likes||{};
-  if(!S.who){const n=(L.a?1:0)+(L.b?1:0);return h('div',{class:'likes'},h('button',{class:'like',type:'button',onclick:whoSheet},icon('heart'),'Curtir'),n?h('span',{class:'like on'},icon('heart'),n===2?'Os dois curtiram':'1 curtida'):null)}
-  const other=S.who==='a'?'b':'a',on=!!L[S.who],o=!!L[other];
-  return h('div',{class:'likes'},
-    h('button',{class:'like'+(on?' on':''),type:'button','aria-pressed':String(on),onclick:()=>myLike(coll,doc)},icon('heart'),on?'Você curtiu':'Curtir'),
-    h('span',{class:'like'+(o?' on':'')},icon('heart'),pname(other)+(o?' curtiu':' ainda não')))}
+function likes(coll,doc){
+  const L=doc.likes||{},crew=crewOf(doc),fans=crew.filter(k=>L[k]);
+  if(!S.who)return h('div',{class:'likes'},h('button',{class:'like',type:'button',onclick:whoSheet},icon('heart'),'Curtir'),fans.length?h('span',{class:'like on'},icon('heart'),fans.length===crew.length?allLabel(doc):fans.length===1?'1 curtida':fans.length+' curtidas'):null);
+  const on=!!L[S.who],rest=fans.filter(k=>k!==S.who);let other;
+  if(crew.length===2){const o=crew.find(k=>k!==S.who)||'b';other=h('span',{class:'like'+(L[o]?' on':'')},icon('heart'),pname(o)+(L[o]?' curtiu':' ainda não'))}
+  else other=h('span',{class:'like'+(rest.length?' on':'')},icon('heart'),rest.length?rest.map(pname).join(', '):'ninguém mais ainda');
+  return h('div',{class:'likes'},h('button',{class:'like'+(on?' on':''),type:'button','aria-pressed':String(on),onclick:()=>myLike(coll,doc)},icon('heart'),on?'Você curtiu':'Curtir'),other)}
 function confirmBtn(label,fn){let armed=false,t;const b=h('button',{class:'btn ghost small danger',type:'button',onclick:()=>{if(!armed){armed=true;b.textContent='Confirmar';t=setTimeout(()=>{armed=false;b.textContent=label},3500)}else{clearTimeout(t);fn()}}},label);return b}
 function copyRow(label,text){return h('div',{class:'copy'},h('span',{class:'mono'},label),h('p',{},text),
   h('button',{class:'btn ghost small',type:'button',onclick:()=>{const fail=()=>toast('Toque no texto para selecionar e copiar.');try{navigator.clipboard.writeText(text).then(()=>toast('Copiado'),fail)}catch(e){fail()}}},'Copiar'))}
@@ -411,16 +507,16 @@ const inp=(id,type,value,extra)=>h('input',Object.assign({id,type,value:value||'
 function daySelect(id,val,min,max){const s=h('select',{id},h('option',{value:''},'Sem data'),DAYS.filter(d=>(!min||d>=min)&&(!max||d<=max)).map(d=>h('option',{value:d,selected:d===val},fmtDay(d))));return s}
 
 function whoSheet(){
-  let pick=S.who;const na=inp('f-na','text',S.people.a,{maxlength:'24',placeholder:'Pessoa 1'}),nb=inp('f-nb','text',S.people.b,{maxlength:'24',placeholder:'Pessoa 2'});
-  const lab=k=>'Sou '+((k==='a'?na:nb).value.trim()||(k==='a'?'a pessoa 1':'a pessoa 2'));
-  const mk=k=>h('button',{class:'pick',type:'button','aria-pressed':String(pick===k),onclick:()=>{pick=k;ba.setAttribute('aria-pressed',String(k==='a'));bb.setAttribute('aria-pressed',String(k==='b'))}},icon('user'),h('span',{},lab(k)));
-  const ba=mk('a'),bb=mk('b');
-  na.addEventListener('input',()=>{ba.lastChild.textContent=lab('a')});nb.addEventListener('input',()=>{bb.lastChild.textContent=lab('b')});
-  openSheet('Quem está aí?',[h('p',{},'Escrevam os dois nomes e marquem quem usa este aparelho. Serve para as curtidas e o placar do jogo.'),
-    h('div',{class:'two'},fld('f-na','Um nome',na),fld('f-nb','Outro nome',nb)),ba,bb,
+  const keys=MC?ALLP:['a','b'],ins={},btns={};let pick=keys.includes(S.who)?S.who:null;
+  const num=k=>ALLP.indexOf(k)+1,lab=k=>'Sou '+(ins[k].value.trim()||'a pessoa '+num(k));
+  keys.forEach(k=>{ins[k]=inp('f-n'+k,'text',S.people[k],{maxlength:'24',placeholder:'Pessoa '+num(k)})});
+  keys.forEach(k=>{btns[k]=h('button',{class:'pick',type:'button','aria-pressed':String(pick===k),onclick:()=>{pick=k;keys.forEach(x=>btns[x].setAttribute('aria-pressed',String(x===k)))}},icon('user'),h('span',{},lab(k)));
+    ins[k].addEventListener('input',()=>{btns[k].lastChild.textContent=lab(k)})});
+  openSheet('Quem está aí?',[h('p',{},(MC?'Escrevam os quatro nomes':'Escrevam os dois nomes')+' e marquem quem usa este aparelho. Serve para as curtidas e o placar do jogo.'),
+    h('div',{class:'two'},keys.map(k=>fld('f-n'+k,'Nome '+num(k),ins[k]))),keys.map(k=>btns[k]),
     h('button',{class:'btn',type:'button',onclick:async()=>{if(!pick){toast('Marque quem é você.');return}
-      S.who=pick;LS.set('who',pick);const a=na.value.trim(),b=nb.value.trim();
-      if(S.db&&(a!==(S.people.a||'')||b!==(S.people.b||'')))await write(db=>upsert(db,'meta/people',{a,b}));
+      S.who=pick;LS.set('who',pick);const names={};let changed=false;keys.forEach(k=>{names[k]=ins[k].value.trim();if(names[k]!==(S.people[k]||''))changed=true});
+      if(S.db&&changed)await write(db=>upsert(db,'meta/people',names));
       closeSheet();if(typeof saveScore==='function')saveScore();render()}},'Pronto')]);
 }
 function scheduleSheet(i){
@@ -428,7 +524,7 @@ function scheduleSheet(i){
   openSheet(i.title,[i.facts&&h('p',{class:'note'},i.facts),
     h('div',{class:'two'},fld('f-day','Dia',sel),fld('f-time','Horário (opcional)',tm)),
     fld('f-title','Nome',nm),fld('f-note','Observação',nt),
-    h('div',{class:'row'},h('button',{class:'btn',type:'button',onclick:async()=>{if(await write(db=>db.doc('ideas/'+i.id).update({title:nm.value.trim()||i.title,note:nt.value.trim(),day:sel.value||null,time:sel.value?(tm.value||null):null}),sel.value?'Agendado para '+fmtDay(sel.value):'Salvo, sem data'))closeSheet()}},'Salvar'),
+    h('div',{class:'row'},h('button',{class:'btn',type:'button',onclick:async()=>{if(await write(db=>db.doc('ideas/'+i.id).update(Object.assign({title:nm.value.trim()||i.title,note:nt.value.trim(),day:sel.value||null,time:sel.value?(tm.value||null):null},reg(sel.value))),sel.value?'Agendado para '+fmtDay(sel.value):'Salvo, sem data'))closeSheet()}},'Salvar'),
       safeUrl(i.link)&&ext(i.link,'Abrir link'),
       confirmBtn('Apagar ideia',async()=>{if(await write(db=>db.doc('ideas/'+i.id).delete(),'Ideia apagada'))closeSheet()}))]);
 }
@@ -439,8 +535,8 @@ function addToDaySheet(day){
     free.length?h('div',{class:'picks'},btns):h('p',{class:'note'},'Nenhuma ideia sem data no momento.'),
     fld('f-new','Ou escreva algo novo',nt),fld('f-time','Horário (opcional)',tm),
     h('button',{class:'btn',type:'button',onclick:async()=>{const title=nt.value.trim(),time=tm.value||null;let ok;
-      if(title)ok=await write(db=>db.collection('ideas').add({title,day,time,likes:{},order:Date.now()}),'Adicionado');
-      else if(pick)ok=await write(db=>db.doc('ideas/'+pick.id).update({day,time}),'Agendado');
+      if(title)ok=await write(db=>db.collection('ideas').add(Object.assign({title,day,time,likes:{},order:Date.now()},reg(day),MC?{area:'Macapá'}:{})),'Adicionado');
+      else if(pick)ok=await write(db=>db.doc('ideas/'+pick.id).update(Object.assign({day,time},reg(day))),'Agendado');
       else{toast('Escolha uma ideia ou escreva uma nova.');return}
       if(ok)closeSheet()}},'Adicionar ao dia')]);
 }
@@ -449,7 +545,7 @@ function ideaSheet(){
   openSheet('Nova ideia',[fld('f-title','Nome',t),fld('f-area','Lugar (opcional)',a),fld('f-link','Link (opcional)',l),fld('f-note','Observação (opcional)',n),
     h('button',{class:'btn',type:'button',onclick:async()=>{const title=t.value.trim();if(!title){toast('Dê um nome para a ideia.');return}
       if(l.value.trim()&&!safeUrl(l.value.trim())){toast('O link precisa começar com https://');return}
-      if(await write(db=>db.collection('ideas').add({title,area:a.value.trim(),link:l.value.trim(),note:n.value.trim(),day:null,time:null,likes:{},order:Date.now()}),'Ideia guardada'))closeSheet()}},'Guardar ideia')]);
+      if(await write(db=>db.collection('ideas').add(Object.assign({title,area:a.value.trim()||(MC?'Macapá':''),link:l.value.trim(),note:n.value.trim(),day:null,time:null,likes:{},order:Date.now()},MC||S.filter==='macapa'?{region:'macapa'}:{})),'Ideia guardada'))closeSheet()}},'Guardar ideia')]);
 }
 function optionSheet(dec){
   const t=inp('f-title','text','',{maxlength:'80'}),l=inp('f-link','url','',{placeholder:'https://'}),n=h('textarea',{id:'f-note',rows:'3',maxlength:'400'});
@@ -460,14 +556,14 @@ function optionSheet(dec){
 }
 function staySheet(){
   const nm=inp('f-name','text','',{maxlength:'80'}),kd=h('select',{id:'f-kind'},['Hotel','Airbnb','Pousada','Casa de alguém'].map(k=>h('option',{value:k},k))),ct=inp('f-city','text','',{maxlength:'60'}),
-    d1=daySelect('f-cin','2027-01-05'),t1=inp('f-cint','time','15:00'),d2=daySelect('f-cout','2027-01-09'),t2=inp('f-coutt','time','12:00'),ad=inp('f-addr','text','',{maxlength:'160'}),lk=inp('f-link','url','',{placeholder:'https://'}),ph=inp('f-phone','text','',{maxlength:'30'});
+    d1=daySelect('f-cin',MC?MCP:'2027-01-05'),t1=inp('f-cint','time','15:00'),d2=daySelect('f-cout',MC?END:'2027-01-09'),t2=inp('f-coutt','time','12:00'),ad=inp('f-addr','text','',{maxlength:'160'}),lk=inp('f-link','url','',{placeholder:'https://'}),ph=inp('f-phone','text','',{maxlength:'30'});
   openSheet('Nova reserva',[fld('f-name','Nome do lugar',nm),h('div',{class:'two'},fld('f-kind','Tipo',kd),fld('f-city','Cidade',ct)),
     h('div',{class:'two'},fld('f-cin','Check-in',d1),fld('f-cint','A partir de',t1)),h('div',{class:'two'},fld('f-cout','Check-out',d2),fld('f-coutt','Até',t2)),
     fld('f-addr','Endereço (opcional)',ad),fld('f-link','Link da reserva (opcional)',lk),fld('f-phone','Telefone (opcional)',ph),
     h('button',{class:'btn',type:'button',onclick:async()=>{const name=nm.value.trim();if(!name){toast('Dê um nome para a reserva.');return}
       if(!d1.value||!d2.value||d2.value<=d1.value){toast('O check-out precisa ser depois do check-in.');return}
       if(lk.value.trim()&&!safeUrl(lk.value.trim())){toast('O link precisa começar com https://');return}
-      if(await write(db=>db.collection('stays').add({name,kind:kd.value,city:ct.value.trim(),cinDay:d1.value,cinTime:t1.value||'15:00',coutDay:d2.value,coutTime:t2.value||'12:00',addr:ad.value.trim(),link:lk.value.trim(),phone:ph.value.trim()}),'Reserva adicionada'))closeSheet()}},'Salvar reserva')]);
+      if(await write(db=>db.collection('stays').add(Object.assign({name,kind:kd.value,city:ct.value.trim()||(MC?'Macapá':''),cinDay:d1.value,cinTime:t1.value||'15:00',coutDay:d2.value,coutTime:t2.value||'12:00',addr:ad.value.trim(),link:lk.value.trim(),phone:ph.value.trim()},reg(d1.value))),'Reserva adicionada'))closeSheet()}},'Salvar reserva')]);
 }
 function textSheet(title,hint,initial,max,onSave){
   const n=h('textarea',{id:'f-text',rows:'4',maxlength:String(max)},initial||'');
@@ -510,7 +606,7 @@ const KIC={flight:'plane',drive:'car',stay:'bed'};
 function entryLi(e){
   let body;
   if(e.kind==='show')body=ticket(e.data);
-  else if(e.kind==='idea'){const i=e.idea;body=h('button',{class:'ent',type:'button',onclick:()=>scheduleSheet(i)},h('b',{},i.title),(i.area||i.dist)&&h('span',{},[i.area,i.dist].filter(Boolean).join(' · ')),both(i)&&h('span',{class:'match'},'Os dois curtiram'))}
+  else if(e.kind==='idea'){const i=e.idea;body=h('button',{class:'ent',type:'button',onclick:()=>scheduleSheet(i)},h('b',{},i.title),(i.area||i.dist)&&h('span',{},[i.area,i.dist].filter(Boolean).join(' · ')),both(i)&&h('span',{class:'match'},allLabel(i)))}
   else body=h('div',{class:'ent'},h('b',{},icon(KIC[e.kind]),' ',e.title),e.sub&&h('span',{},e.sub),e.tab&&h('a',{class:'lnk',href:'#'+e.tab},'Ver a estrada'));
   return h('li',{class:'k-'+e.kind},h('span',{class:'when'},e.show),h('i',{class:'dot'}),body);
 }
@@ -522,14 +618,15 @@ function decCallout(dec){
     h('div',{class:'row'},h('a',{class:'btn small',href:'#decidir'},'Decidir')));
 }
 function phaseOf(d,stay){
-  if(d===START)return'chegada';if(d==='2026-12-28')return'estrada';if(d==='2026-12-31')return'virada';if(d==='2027-01-01')return'ano novo';if(d===END)return'despedida';if(d===MCP)return'voo para macapá';if(d>MCP)return'macapá';
+  if(d===START)return'chegada';if(d==='2026-12-28')return'estrada';if(d==='2026-12-31')return'virada';if(d==='2027-01-01')return'ano novo';if(d===END)return MC?'volta':'despedida';if(d===MCP)return'voo para macapá';if(d>MCP)return'macapá';
   return stay?(stay.city||stay.name).split(',').pop().trim().toLowerCase():'em aberto';
 }
 function daySection(d,i,today){
-  const p=dparts(d),stay=stayFor(d),last=d===END,ents=entriesFor(d),dec=DECS.find(x=>x.day===d),note=S.days[d];
+  const p=dparts(d),stay=stayFor(d),last=d===END,sad=last&&!MC,ents=entriesFor(d),dec=DECS.find(x=>x.day===d),note=S.days[d];
   const kids=[h('header',{class:'day-h'},h('div',{class:'dnum'},p2(p.day)),h('div',{},h('h2',{},WD[p.wd]),h('p',{class:'mono'},MO[p.mo]+' · dia '+(i+1)+' de '+DAYS.length+' · '+phaseOf(d,stay))))];
   if(!last&&S.db)kids.push(h('p',{class:'sleep'+(stay||inMcp(d)?'':' open')},icon('bed'),stay?'Dorme em '+stay.name:inMcp(d)?'Noite em Macapá':'Noite sem hospedagem ainda'));
-  if(last)kids.push(h('p',{class:'sadline'},'O dia triste do roteiro.'),h('p',{},'O voo de volta para Curitiba sai de Macapá às 03:00. Em Curitiba, só o BYD esperando.'));
+  if(sad)kids.push(h('p',{class:'sadline'},'O dia triste do roteiro.'),h('p',{},'O voo de volta para Curitiba sai de Macapá às 03:00. Em Curitiba, só o BYD esperando.'));
+  if(last&&MC)kids.push(h('p',{class:'sleep'},icon('plane'),'Última madrugada: o voo para Curitiba sai às 03:00.'));
   if(ents.length)kids.push(h('ol',{class:'tl'},ents.map(entryLi)));
   if(dec)kids.push(decCallout(dec));
   if(d==='2027-01-09'&&!stay&&S.db)kids.push(h('div',{class:'callout'},h('span',{class:'mono'},'Atenção'),h('b',{},'Última noite: o voo sai às 05:25 de Curitiba'),
@@ -540,9 +637,9 @@ function daySection(d,i,today){
       ?h('div',{class:'moment'},h('span',{class:'mono'},'Momento do dia'),h('q',{},note.text),h('div',{class:'row'},h('button',{class:'btn ghost small',type:'button',onclick:()=>momentSheet(d,note.text)},'Editar')))
       :h('button',{class:'btn ghost small',type:'button',onclick:()=>momentSheet(d,'')},'Guardar o momento do dia'));
   }
-  return h('section',{class:'day'+(d===today?' today':'')+(last?' sad':inMcp(d)?' mcp':''),id:'d-'+d},kids);
+  return h('section',{class:'day'+(d===today?' today':'')+(sad?' sad':inMcp(d)?' mcp':''),id:'d-'+d},kids);
 }
-const momentSheet=(d,cur)=>textSheet('Momento de '+fmtDay(d),'Uma frase sobre o melhor do dia. Os dois veem.',cur,200,v=>write(db=>db.doc('days/'+d).set({text:v}),'Guardado'));
+const momentSheet=(d,cur)=>textSheet('Momento de '+fmtDay(d),MC?'Uma frase sobre o melhor do dia. Todo mundo vê.':'Uma frase sobre o melhor do dia. Os dois veem.',cur,200,v=>write(db=>db.doc('days/'+d).set(Object.assign({text:v},reg(d))),'Guardado'));
 
 /* ---------- telas ---------- */
 function hero(){
@@ -551,6 +648,7 @@ function hero(){
       stub:[h('span',{class:'cd-big',id:'cd-big'}),h('span',{class:'cd-unit',id:'cd-unit'}),h('span',{class:'cd-rest',id:'cd-rest'}),h('p',{class:'cd-cap',id:'cd-cap'})]}));
 }
 function tick(){
+  if(MC)return tickMc();
   const big=$('#cd-big');if(!big)return;const now=Date.now(),set=(a,b,c,d)=>{big.textContent=a;$('#cd-unit').textContent=b;$('#cd-rest').textContent=c;$('#cd-cap').textContent=d};
   const split=ms=>{const s=Math.max(0,Math.floor(ms/1e3));return[Math.floor(s/86400),Math.floor(s%86400/3600),Math.floor(s%3600/60),s%60]};
   if(now<LAND){const[d,hh,m,s]=split(LAND-now);set(String(d),d===1?'dia':'dias',p2(hh)+'h '+p2(m)+'m '+p2(s)+'s','até o pouso em Curitiba')}
@@ -562,7 +660,7 @@ function dayStrip(today){
   return h('div',{class:'strip',role:'group','aria-label':'Dias da viagem'},DAYS.map((d,i)=>{const p=dparts(d),hot=d==='2026-12-31'||SHOWS.some(s=>s.day===d),
     open=S.db&&d!==END&&!inMcp(d)&&(!stayFor(d)||DECS.some(x=>x.day===d&&!S.decisions[x.key]));
     return h('button',{class:'dchip'+(d===today?' today':'')+(d===END?' gone':inMcp(d)?' mcp':''),id:'c-'+d,type:'button','aria-label':fmtDay(d)+(hot?', noite de festa':''),onclick:()=>{const el=document.getElementById('d-'+d);if(el)el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'})}},
-      h('i',{class:'bar'+(hot?' hot':''),style:'height:'+Math.round(ENERGY[i]*34)+'px'}),h('b',{},p2(p.day)),h('span',{},WDS[p.wd]),h('u',{class:open?'m-open':''}))}));
+      h('i',{class:'bar'+(hot?' hot':''),style:'height:'+Math.round(ENERGY[i+(MC?14:0)]*34)+'px'}),h('b',{},p2(p.day)),h('span',{},WDS[p.wd]),h('u',{class:open?'m-open':''}))}));
 }
 const MCP_ART='<svg viewBox="0 0 320 132" role="img" aria-label="Rio Amazonas com vitórias-régias, copa da floresta e a linha do Equador"><rect width="320" height="132" style="fill:var(--bg)"/><circle cx="246" cy="50" r="22" style="fill:var(--bolt)"/><path d="M0 50H320" style="stroke:var(--leaf);stroke-width:1.2;stroke-dasharray:3 5;fill:none"/><text x="96" y="43" style="font:500 8px DM Mono,monospace;fill:var(--leaf);letter-spacing:.08em">LINHA DO EQUADOR · 0°</text><path d="M0 84C40 78 70 90 110 84S180 78 220 85s70-6 100-1V132H0Z" style="fill:var(--river)"/><g style="fill:var(--leaf-light);stroke:var(--leaf);stroke-width:1.2"><ellipse cx="62" cy="108" rx="27" ry="9"/><ellipse cx="134" cy="118" rx="19" ry="6.5"/><ellipse cx="204" cy="103" rx="30" ry="10"/><ellipse cx="282" cy="117" rx="22" ry="7.5"/></g><g style="fill:var(--river)"><path d="M62 108L85 102L80 98Z"/><path d="M134 118L150 114L146 111Z"/><path d="M204 103L229 96L223 92Z"/><path d="M282 117L301 112L297 109Z"/></g><circle cx="190" cy="101" r="5" style="fill:var(--bg);stroke:var(--heart);stroke-width:1.5"/><circle cx="190" cy="101" r="1.8" style="fill:var(--bolt)"/><g style="fill:var(--leaf)"><path d="M0 0H74C66 22 44 38 14 40C10 58 6 70 0 78Z"/><path d="M320 0H262C272 16 290 24 308 24C312 40 316 50 320 56Z"/></g><g style="fill:var(--leaf-light)"><path d="M18 0H96C84 14 66 22 44 22C34 14 26 8 18 0Z"/><path d="M320 0H250C262 8 280 12 300 10Z"/></g></svg>';
 function mcpCard(){
@@ -571,7 +669,7 @@ function mcpCard(){
     h('p',{},'Os dois no mesmo voo para o outro lado do mapa: beira do Amazonas, linha do Equador e floresta.'),
     pass({from:['CWB','Curitiba'],to:['MCP','Macapá'],fields:[['data','dom 10/01'],['decolagem','05:25'],['pouso','14:10']]}));
 }
-function viewDias(){const today=todayBRT();return[hero(),dayStrip(today),...DAYS.flatMap((d,i)=>d===MCP?[mcpCard(),daySection(d,i,today)]:[daySection(d,i,today)])]}
+function viewDias(){const today=todayBRT();return[MC?mcHero():hero(),dayStrip(today),...DAYS.flatMap((d,i)=>d===MCP&&!MC?[mcpCard(),daySection(d,i,today)]:[daySection(d,i,today)])]}
 // tema: na aba Dias, vira floresta quando a parte de Macapá entra na tela; nas outras abas, durante os dias em Macapá
 let amazonOn=null,themeQ=0;
 function syncStrip(smooth){
@@ -580,7 +678,7 @@ function syncStrip(smooth){
   if(smooth&&st.scrollTo&&!matchMedia('(prefers-reduced-motion: reduce)').matches)st.scrollTo({left,behavior:'smooth'});else st.scrollLeft=left;
 }
 function themeCheck(){
-  const el=document.getElementById('mcp-start'),t=todayBRT(),on=S.tab==='dias'&&el?el.getBoundingClientRect().top<window.innerHeight*.62:t>=MCP&&t<=END;
+  const el=document.getElementById('mcp-start'),t=todayBRT(),on=MC||(S.tab==='dias'&&el?el.getBoundingClientRect().top<window.innerHeight*.62:t>=MCP&&t<=END);
   if(on===amazonOn)return;amazonOn=on;
   document.documentElement.classList.toggle('amazon',on);G.k=null;if(G.el&&G.state!=='run')draw();
   const m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',on?'#FBFDF8':'#FFFFFF');
@@ -629,9 +727,10 @@ function loadingNote(what){
   return null;
 }
 function viewIdeias(){
-  const F=[['todas','Todas'],['livres','Sem data'],['agendadas','Agendadas'],['macapa','Macapá'],['match','Os dois curtiram']];
-  const list=S.ideas.slice().sort(byOrder).filter(i=>S.filter==='livres'?!i.day:S.filter==='agendadas'?!!i.day:S.filter==='match'?both(i):S.filter==='macapa'?i.region==='macapa':true);
-  return[h('div',{class:'vh'},h('h2',{},'Ideias de passeio'),h('p',{},'Curtam o que animar e agendem num dia. Distâncias são de carro, saindo do hotel, sem trânsito. Horários e preços vêm de guias de 2024 a 2026: confirmem antes de ir.')),
+  const F=MC?[['todas','Todas'],['livres','Sem data'],['agendadas','Agendadas'],['match','Todos curtiram']]:[['todas','Todas'],['livres','Sem data'],['agendadas','Agendadas'],['macapa','Macapá'],['match','Os dois curtiram']];
+  const votes=i=>Object.values(i.likes||{}).filter(Boolean).length;
+  const list=S.ideas.slice().sort(MC?(a,b)=>votes(b)-votes(a)||byOrder(a,b):byOrder).filter(i=>S.filter==='livres'?!i.day:S.filter==='agendadas'?!!i.day:S.filter==='match'?both(i):S.filter==='macapa'?i.region==='macapa':true);
+  return[h('div',{class:'vh'},h('h2',{},'Ideias de passeio'),h('p',{},MC?'Cada um curte o que quer fazer e as mais votadas sobem. Depois é só agendar num dia.':'Curtam o que animar e agendem num dia. Distâncias são de carro, saindo do hotel, sem trânsito. Horários e preços vêm de guias de 2024 a 2026: confirmem antes de ir.')),
     h('div',{class:'chips',role:'group','aria-label':'Filtro'},F.map(f=>h('button',{class:'chip',type:'button','aria-pressed':String(S.filter===f[0]),onclick:()=>{S.filter=f[0];render()}},f[1]))),
     h('button',{class:'btn dashed',type:'button',onclick:ideaSheet},icon('plus'),'Nova ideia'),
     ...(list.length?list.map(ideaCard):[loadingNote('As ideias')||h('div',{class:'empty'},h('b',{},S.ideas.length?'Nada neste filtro':'Nenhuma ideia ainda'),h('p',{},S.ideas.length?'Troque o filtro acima.':'Toque em “Nova ideia” para começar a lista.'))])];
@@ -642,7 +741,7 @@ function checklist(group,title,hint){
     items.length?h('ul',{class:'check'},items.map(c=>h('li',{class:c.done?'done':''},
       h('label',{},h('input',{type:'checkbox',id:'ck-'+c.id,checked:!!c.done,onchange:e=>write(db=>db.doc('checklist/'+c.id).update({done:e.target.checked}))}),h('span',{},c.text)),
       (()=>{let armed=false;const b=h('button',{class:'x',type:'button','aria-label':'Apagar item',onclick:()=>{if(!armed){armed=true;b.textContent='apagar?';setTimeout(()=>{armed=false;b.textContent='✕'},3000)}else write(db=>db.doc('checklist/'+c.id).delete())}},'✕');return b})()))):loadingNote('Os itens'),
-    h('div',{class:'row'},h('button',{class:'btn ghost small',type:'button',onclick:()=>textSheet('Novo item','Entra na lista “'+title+'”.','',120,v=>write(db=>db.collection('checklist').add({text:v,group,done:false,order:Date.now()}),'Item adicionado'))},icon('plus'),'Adicionar item')));
+    h('div',{class:'row'},h('button',{class:'btn ghost small',type:'button',onclick:()=>textSheet('Novo item','Entra na lista “'+title+'”.','',120,v=>write(db=>db.collection('checklist').add(Object.assign({text:v,group,done:false,order:Date.now()},MC?{region:'macapa'}:{})),'Item adicionado'))},icon('plus'),'Adicionar item')));
 }
 function decisionCard(dec){
   const opts=S.options.filter(o=>o.decision===dec.key).sort(byOrder),chosen=S.decisions[dec.key];
@@ -653,7 +752,9 @@ function decisionCard(dec){
         safeUrl(o.link)&&ext(o.link,'Abrir'),confirmBtn('Apagar',()=>write(db=>db.doc('options/'+o.id).delete(),'Opção apagada'))))}):[loadingNote('As opções')||h('div',{class:'empty'},h('b',{},'Nenhuma opção na mesa'))]),
     h('button',{class:'btn dashed',type:'button',onclick:()=>optionSheet(dec)},icon('plus'),'Nova opção'));
 }
-function viewDecidir(){return[...DECS.map(decisionCard),checklist('pendencias','Pendências','O que ainda falta resolver antes de sair.')]}
+function viewDecidir(){
+  if(MC)return[h('div',{class:'vh'},h('h2',{},'Lista'),h('p',{},'O que falta combinar e o que levar. Qualquer um marca e adiciona.')),checklist('pendencias','Pendências do grupo','O que ainda falta resolver antes do embarque.'),checklist('mala','Na mala','Para o calor, a chuva e o rio.')];
+  return[...DECS.map(decisionCard),checklist('pendencias','Pendências','O que ainda falta resolver antes de sair.')]}
 function viewEstrada(){
   return[h('div',{class:'vh'},h('h2',{},'Estrada'),h('p',{},'BYD azul, dois lugares ocupados e a serra no caminho.')),
     h('div',{class:'card'},h('span',{class:'mono'},'seg 28/12 · depois do almoço'),h('h3',{},'Curitiba → Cabeçudas'),
@@ -991,12 +1092,12 @@ function viewJogo(){
   const pesca=S.game==='pesca',sc=pesca?S.pesca:S.scores,best=k=>sc[k]?sc[k]+' pts':'sem recorde';
   return[h('div',{class:'vh'},h('h2',{},pesca?'Pesca no Amazonas':'Rumo a Cabeçudas'),
       h('p',{},pesca?'Um minuto até o sol se pôr no rio. Peixe grande vale mais e pesa mais na linha. A piranha rouba o que estiver no anzol e o poraquê dá choque.':'Os 214 km de Curitiba até o hotel em menos de um minuto, a 124 bpm. Pontos: km rodados, discos (em sequência valem mais), raspões e a bateria que sobrar na chegada.')),
-    h('div',{class:'chips',role:'group','aria-label':'Qual jogo'},[['estrada','Estrada'],['pesca','Pesca no rio']].map(o=>h('button',{class:'chip',type:'button','aria-pressed':String(S.game===o[0]),onclick:()=>setGame(o[0])},o[1]))),
+    !MC&&h('div',{class:'chips',role:'group','aria-label':'Qual jogo'},[['estrada','Estrada'],['pesca','Pesca no rio']].map(o=>h('button',{class:'chip',type:'button','aria-pressed':String(S.game===o[0]),onclick:()=>setGame(o[0])},o[1]))),
     pesca?fishEl():gameEl(),
-    h('div',{class:'chips',role:'group','aria-label':'Som do jogo',style:'justify-content:center'},[['jogo','Som do jogo'],['playlist','Nossa playlist'],['off','Sem som']].map(o=>h('button',{class:'chip',type:'button','aria-pressed':String(S.audio===o[0]),onclick:()=>setAudio(o[0])},o[1]))),
+    h('div',{class:'chips',role:'group','aria-label':'Som do jogo',style:'justify-content:center'},(MC?[['jogo','Som do jogo'],['off','Sem som']]:[['jogo','Som do jogo'],['playlist','Nossa playlist'],['off','Sem som']]).map(o=>h('button',{class:'chip',type:'button','aria-pressed':String((MC&&S.audio==='playlist'?'off':S.audio)===o[0]),onclick:()=>setAudio(o[0])},o[1]))),
     S.audio==='playlist'&&h('p',{class:'note',style:'text-align:center'},'A playlist toca no player do Spotify no topo desta tela. Se não começar sozinha, toque no play dele.'),
     S.now&&h('p',{class:'note',style:'text-align:center'},'Tocando no seu Spotify: '+S.now.title+' · '+S.now.artist),
-    h('div',{class:'card'},h('span',{class:'mono'},pesca?'Recordes da pesca':'Recordes da estrada'),h('ul',{class:'legs'},['a','b'].map(k=>h('li',{},h('span',{},pname(k)+(S.who===k?' (você)':'')),h('b',{},best(k))))),
+    MC?rankCard():h('div',{class:'card'},h('span',{class:'mono'},pesca?'Recordes da pesca':'Recordes da estrada'),h('ul',{class:'legs'},(pesca?ALLP.filter(k=>k<'c'||S.people[k]||sc[k]):['a','b']).map(k=>h('li',{},h('span',{},pname(k)+(S.who===k?' (você)':'')),h('b',{},best(k))))),
       !S.who&&h('p',{class:'note'},'Toque em “Quem é você?” lá em cima para o seu recorde entrar no placar.'))];
 }
 function viewPlaylist(){return[h('div',{class:'vh'},h('h2',{},'Playlist'),h('p',{},'A trilha da viagem, montada pelos dois.')),...playlistView()]}
@@ -1226,10 +1327,63 @@ function playlistView(){
     ...(S.db?recsView():[])];
 }
 
+/* ---------- Meio do Mundo: peças que só existem no endereço de Macapá ---------- */
+const TAKEOFF=at(MCP,'05:25');
+function mcScene(){
+  let seed=11;const rnd=()=>(seed=(seed*1664525+1013904223)>>>0)/4294967296,n=v=>v.toFixed(1);
+  const trees=(y,r0,r1)=>{let d='M-20 '+y,x=-20;while(x<430){const r=r0+rnd()*(r1-r0);d+='a'+n(r)+' '+n(r)+' 0 0 1 '+n(2*r)+' 0';x+=2*r}return d+'V440H-20Z'};
+  const pad=(x,y,rx,flower)=>{const ry=rx*.34;return'<g transform="translate('+x+' '+y+')"><g class="bob" style="animation-delay:-'+n(rnd()*4)+'s"><ellipse rx="'+rx+'" ry="'+n(ry)+'" fill="#9FD9B4" stroke="#0E7A52" stroke-width="1.3"/><path d="M0 0L'+n(rx*.95)+' '+n(-ry*.42)+'L'+n(rx*.74)+' '+n(-ry*.86)+'Z" fill="#EADDB8"/>'+(flower?'<circle cx="'+n(-rx*.3)+'" cy="-2" r="5.5" fill="#FFFFFF" stroke="#7A2E8E" stroke-width="1.6"/><circle cx="'+n(-rx*.3)+'" cy="-2" r="2" fill="#F6BE3A"/>':'')+'</g></g>'};
+  const leaf=(x,y,rot,sc,fill)=>'<g transform="translate('+x+' '+y+') rotate('+rot+') scale('+sc+')"><path d="M0 0C-30 -34 -32 -92 0 -136C32 -92 30 -34 0 0Z" fill="'+fill+'"/><path d="M0 -6V-124" stroke="#9FD9B4" stroke-width="1.6" opacity=".55" fill="none"/></g>';
+  const heads=[['#0E7A52',-21],['#D9981F',-7],['#7A2E8E',7],['#1479B8',21]].map(c=>'<rect x="'+(c[1]-4.5)+'" y="-17" width="9" height="12" rx="3" fill="'+c[0]+'"/><circle cx="'+c[1]+'" cy="-22" r="4.6" fill="#14352A"/>').join('');
+  return'<svg viewBox="0 0 400 420" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><defs><linearGradient id="mcsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFF3C9"/><stop offset=".55" stop-color="#F4F8DC"/><stop offset="1" stop-color="#D3EDDB"/></linearGradient><linearGradient id="mcriver" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F4E8C6"/><stop offset="1" stop-color="#D6C191"/></linearGradient></defs>'
+   +'<rect width="400" height="420" fill="url(#mcsky)"/>'
+   +'<g class="pl1"><circle class="glow" cx="292" cy="250" r="92" fill="#FFD76A" opacity=".26"/><circle cx="292" cy="250" r="58" fill="#FFC53D"/></g>'
+   +'<g class="pl1"><g class="fly"><path d="M0 96q6-8 12 0q6-8 12 0M40 78q5-7 10 0q5-7 10 0" fill="none" stroke="#14352A" stroke-width="1.8" stroke-linecap="round"/></g></g>'
+   +'<g class="pl2"><path d="M0 250H400" stroke="#0F3B2B" stroke-width="1.2" stroke-dasharray="2 6" opacity=".7"/><text x="384" y="243" text-anchor="end" font-family="DM Mono,monospace" font-size="9" letter-spacing="1.2" fill="#0F3B2B">EQUADOR · 0° 00′ 00″</text><path d="'+trees(264,9,17)+'" fill="#8FCFA4"/></g>'
+   +'<g class="pl3"><path d="'+trees(279,11,20)+'" fill="#2F9567"/></g>'
+   +'<path d="'+trees(294,8,14)+'" fill="#11704A"/><rect y="300" width="400" height="122" fill="url(#mcriver)"/>'
+   +'<g class="shim" stroke="#FFC53D" stroke-width="3" stroke-linecap="round"><path d="M262 310h60M270 322h44M278 334h30M284 346h18"/></g>'
+   +'<g stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" opacity=".7"><path d="M30 314h26M120 326h18M186 310h22M340 332h24M70 348h20"/></g>'
+   +'<g transform="translate(150 334)"><g class="drift"><g class="bob"><path d="M-40 -6Q0 16 40 -6Z" fill="#7A4A2C"/>'+heads+'</g></g></g>'
+   +pad(52,366,28)+pad(250,356,32,true)+pad(340,372,24)+pad(378,336,16)+pad(22,330,14)
+   +'<g class="pl5"><g transform="translate(-6 430)"><g class="sway">'+leaf(0,0,24,1.15,'#0E5C3D')+leaf(18,6,52,.95,'#17804F')+leaf(-4,4,-2,.8,'#0E5C3D')+'</g></g>'
+   +'<g transform="translate(406 -8)"><g class="sway" style="animation-delay:-2s">'+leaf(0,0,205,1.1,'#0E5C3D')+leaf(-14,-4,232,.85,'#17804F')+'</g></g></g></svg>';
+}
+function mcHero(){
+  const scene=h('div',{class:'mh-scene'});scene.innerHTML=mcScene();
+  const ini=k=>{const nm=String(S.people[k]||'').trim();return nm?nm[0].toUpperCase():'+'};
+  return h('div',{},h('section',{class:'mh'},scene,
+      h('div',{class:'mh-copy'},h('p',{class:'mh-kicker'},'10 → 19 jan 2027 · Curitiba → Macapá'),h('h1',{class:'mh-title'},h('span',{},'Meio'),h('span',{},'do Mundo')),h('p',{class:'mh-tag'},'Quatro pessoas, dez dias, zero grau de latitude.'))),
+    h('div',{class:'mh-panel'},
+      h('div',{class:'mh-cd',role:'timer','aria-label':'Contagem'},[['d','dias'],['h','horas'],['m','min'],['s','seg']].map(c=>h('div',{},h('b',{id:'mc-'+c[0]},'00'),h('span',{},c[1])))),
+      h('p',{class:'mh-cap',id:'mc-cap'},''),
+      h('div',{class:'crew','aria-label':'Tripulação'},ALLP.map(k=>h('button',{type:'button',class:(S.people[k]?'':'none')+(S.who===k?' me':''),onclick:whoSheet},h('i',{},ini(k)),h('span',{},S.people[k]||'Quem falta?'))))));
+}
+function tickMc(){
+  const d=$('#mc-d');if(!d)return;const now=Date.now(),target=now<TAKEOFF?TAKEOFF:LEAVE,s=Math.max(0,Math.floor((target-now)/1e3));
+  d.textContent=p2(Math.floor(s/86400));$('#mc-h').textContent=p2(Math.floor(s%86400/3600));$('#mc-m').textContent=p2(Math.floor(s%3600/60));$('#mc-s').textContent=p2(s%60);
+  $('#mc-cap').textContent=now<TAKEOFF?'até a decolagem em Curitiba, domingo 10/01 às 05:25':now<LEAVE?'de Macapá pela frente, até a volta de terça 19/01 às 03:00':'Foi no meio do mundo. Os momentos de cada dia continuam aqui embaixo.';
+}
+function viewVoos(){
+  const stays=allStays().filter(s=>s.cin[0]>=MCP).sort((a,b)=>a.cin[0]<b.cin[0]?-1:1);
+  return[h('div',{class:'vh'},h('h2',{},'Voos e casa'),h('p',{},'Os dois voos do grupo e onde cada um fica em Macapá.')),
+    pass({from:['CWB','Curitiba'],to:['MCP','Macapá'],fields:[['data','dom 10/01'],['decolagem','05:25'],['pouso','14:10']]}),
+    pass({from:['MCP','Macapá'],to:['CWB','Curitiba'],fields:[['data','ter 19/01'],['decolagem','03:00'],['pouso','13:10']]}),
+    h('div',{class:'vh'},h('h2',{},'Onde ficar')),
+    ...(S.db?(stays.length?stays.map(stayCard):[h('div',{class:'empty'},h('b',{},'Nenhum lugar cadastrado'),h('p',{},'Hotel, casa de alguém, o que for: adicionem aqui com as datas.'))]):[loadingNote('As hospedagens')]),
+    h('button',{class:'btn dashed',type:'button',onclick:staySheet},icon('plus'),'Adicionar lugar')];
+}
+function rankCard(){
+  const rows=ALLP.map(k=>({k,v:S.pesca[k]||0})).sort((a,b)=>b.v-a.v);
+  return h('div',{class:'card'},h('span',{class:'mono'},'Ranking da pesca'),h('ol',{class:'rank'},rows.map((r,i)=>h('li',{},h('i',{},(i+1)+'º'),h('span',{},pname(r.k)+(S.who===r.k?' (você)':'')),h('b',{},r.v?r.v+' pts':'sem recorde')))),
+    !S.who&&h('p',{class:'note'},'Toque em “Quem é você?” lá em cima para o seu recorde entrar no ranking.'));
+}
+if(MC)window.addEventListener('scroll',()=>{const m=document.querySelector('.mh');if(m&&window.scrollY<560)m.style.setProperty('--sy',String(Math.round(window.scrollY)))},{passive:true});
+
 /* ---------- render ---------- */
 let raf=0;const soon=()=>{if(!raf)raf=requestAnimationFrame(()=>{raf=0;render()})};
 function render(){
-  const map={dias:viewDias,reservas:viewReservas,ideias:viewIdeias,decidir:viewDecidir,estrada:viewEstrada,jogo:viewJogo,playlist:viewPlaylist};
+  const map={dias:viewDias,reservas:MC?viewVoos:viewReservas,ideias:viewIdeias,decidir:viewDecidir,estrada:viewEstrada,jogo:viewJogo,playlist:viewPlaylist};
   $('#view').replaceChildren(...(map[S.tab]||viewDias)().filter(Boolean));
   themeCheck();syncStrip(false);
   document.querySelectorAll('#tabs a').forEach(a=>{if(a.getAttribute('href')==='#'+S.tab)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
@@ -1244,6 +1398,7 @@ function render(){
 }
 $('#tabs').replaceChildren(...TABS.map(t=>h('a',{href:'#'+t[0]},icon(t[2]),t[1])));
 $('#who').addEventListener('click',whoSheet);
+if(MC){document.documentElement.classList.add('mcp-site','amazon');document.querySelector('.brand').textContent='Meio do Mundo'}
 function route(first){const t=location.hash.slice(1);const ok=TABS.some(x=>x[0]===t);const next=ok?t:'dias';if(next!==S.tab||first){S.tab=next;render();if(!first)window.scrollTo(0,0)}}
 window.addEventListener('hashchange',()=>route(false));
 setInterval(tick,1000);
@@ -1260,13 +1415,13 @@ async function connect(code){
   db.collection('stays').onSnapshot(s=>{S.stays=rows(s);soon()});
   db.collection('tracks').onSnapshot(s=>{S.tracks=rows(s);soon()});
   db.collection('days').onSnapshot(s=>{const m={};s.docs.forEach(d=>{m[d.id]=d.data()});S.days=m;soon()});
-  db.doc('meta/people').onSnapshot(s=>{const d=s.exists?s.data():{};S.people={a:String(d.a||''),b:String(d.b||'')};soon()});
+  db.doc('meta/people').onSnapshot(s=>{const d=s.exists?s.data():{};S.people={a:String(d.a||''),b:String(d.b||''),c:String(d.c||''),d:String(d.d||'')};soon()});
   db.doc('meta/decisions').onSnapshot(s=>{S.decisions=s.exists?Object.assign({},s.data()):{};soon()});
   db.doc('meta/recs').onSnapshot(s=>{S.recsHidden=(s.exists&&s.data().hidden)||{};soon()});
   db.doc('meta/pesca').onSnapshot(s=>{S.pesca=s.exists?Object.assign({},s.data()):{};soon()});
   db.doc('meta/scores').onSnapshot(s=>{S.scores=s.exists?Object.assign({},s.data()):{};soon()});
   db.doc('meta/playlist').onSnapshot(s=>{const d=s.exists?s.data():{},u=String(d.url||''),m=/playlist[\/:]([A-Za-z0-9]{10,})/.exec(u);S.playlist=u;S.playlistId=String(d.id||'')||(m?m[1]:'');soon()});
-  db.start();render();setTimeout(()=>spSync(true),1500);return true;
+  db.start();render();if(!MC)setTimeout(()=>spSync(true),1500);return true;
 }
 async function boot(){
   const q=new URLSearchParams(location.search),k=q.get('k'),back=await spHandleRedirect(q);
